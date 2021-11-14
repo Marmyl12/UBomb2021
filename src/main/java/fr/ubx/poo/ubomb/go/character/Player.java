@@ -43,6 +43,8 @@ public class Player extends GameObject implements Movable {
         return true;
     }
 
+
+
     public void update(long now) {
 
         if (moveRequested) {
@@ -62,7 +64,7 @@ public class Player extends GameObject implements Movable {
 
     @Override
     public boolean isWalkable(Player player) {
-        return false;
+        return true;
     }
 
     @Override
