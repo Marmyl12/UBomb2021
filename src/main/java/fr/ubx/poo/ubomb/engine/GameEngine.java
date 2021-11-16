@@ -10,6 +10,7 @@ import fr.ubx.poo.ubomb.game.Position;
 import fr.ubx.poo.ubomb.go.GameObject;
 import fr.ubx.poo.ubomb.go.character.Player;
 import fr.ubx.poo.ubomb.go.decor.Decor;
+import fr.ubx.poo.ubomb.go.decor.DoorNextOpened;
 import fr.ubx.poo.ubomb.go.decor.Stone;
 import fr.ubx.poo.ubomb.view.*;
 import javafx.animation.AnimationTimer;
@@ -110,43 +111,6 @@ public final class GameEngine {
 
 
     private void checkCollision(long now) {
-        /*int height = game.getGrid().getHeight();
-        int width = game.getGrid().getWidth();
-
-        Position b = player.getPosition();
-        Position Right = new Position(b.getX()+1, b.getY()) ;
-        Position Left = new Position(b.getX()-1, b.getY()) ;
-        Position Down = new Position(b.getX(), b.getY()-1) ;
-        Position Up = new Position(b.getX(), b.getY()+1) ;
-        //System.out.println(b);
-
-        for (Sprite decor : sprites) {
-
-            GameObject d =  decor.getGameObject() ;
-            Position a = decor.getPosition();
-            Direction dir = player.getDirection();
-            boolean dec = d.isWalkable(player);
-            if ( !(dec) &&(b.equals(a)) ) {
-                if( dir == Direction.UP)
-                        player.doMove(Direction.DOWN);
-                else if( dir == Direction.DOWN)
-                        player.doMove(Direction.UP);
-                else if( dir == Direction.LEFT)
-                        player.doMove(Direction.RIGHT);
-                else if( dir == Direction.RIGHT)
-                        player.doMove(Direction.LEFT);
-            }
-                if(b.getX()<0)
-                    player.setPosition(Right);
-                if (b.getX()>width-1)
-                    player.setPosition(Left);
-                if   (b.getY()<0)
-                    player.setPosition(Up);
-                if   (b.getY()>height-1)
-                    player.setPosition(Down);
-
-            }
-     */
 
     }
 
@@ -163,7 +127,11 @@ public final class GameEngine {
             player.requestMove(Direction.RIGHT);
         } else if (input.isMoveUp()) {
             player.requestMove(Direction.UP);
-            input.clear();
+        } else if (input.isKey()) {
+            if (player.openDoor()) {
+                Position position = player.getDirection().nextPosition(player.getPosition());
+                game.getGrid().replace(position, new DoorNextOpened(position));
+            }
         }
         input.clear();
     }

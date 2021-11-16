@@ -9,7 +9,8 @@ import fr.ubx.poo.ubomb.game.Game;
 import fr.ubx.poo.ubomb.game.Position;
 import fr.ubx.poo.ubomb.go.GameObject;
 import fr.ubx.poo.ubomb.go.Movable;
-import fr.ubx.poo.ubomb.go.decor.Monster;
+import fr.ubx.poo.ubomb.go.decor.*;
+import fr.ubx.poo.ubomb.go.decor.bonus.Bonus;
 
 
 public class Player extends GameObject implements Movable {
@@ -17,14 +18,19 @@ public class Player extends GameObject implements Movable {
     public Direction direction;
     private boolean moveRequested = false;
     private int lives;
-    private int bombNb;
+    private int bombBagCapacity;
+    private int availableBombs;
     private int bombRange;
     private int keys;
 
-    public Player(Game game, Position position, int lives) {
+    public Player(Game game, Position position, int lives, int bombBagCapacity, int bombRange) {
         super(game, position);
         this.direction = Direction.DOWN;
         this.lives = lives;
+        this.bombBagCapacity = bombBagCapacity;
+        availableBombs = bombBagCapacity;
+        this.bombRange = bombRange;
+        this.keys = 0;
     }
 
     public int getLives() {
@@ -75,9 +81,13 @@ public class Player extends GameObject implements Movable {
 
     public void doMove(Direction direction) {
         // Check if we need to pick something up
-
         Position nextPos = direction.nextPosition(getPosition());
         setPosition(nextPos);
+        Decor go = game.getGrid().get(nextPos);
+        if (go instanceof Bonus) {
+            ((Bonus) go).takenBy(this);
+            go.remove();
+        }
     }
 
     @Override
@@ -91,19 +101,40 @@ public class Player extends GameObject implements Movable {
 
     // Example of methods to define by the player
     public void takeDoor(int gotoLevel) {}
-    public void takeDoorClosed() {}
-    public void takeKey() {}
+    public void takeKey() { keys++; }
     public void takeHeart() {}
     public void takeBombRangeInc() {}
     public void takeBombRangeDec() {}
     public void BombNumberInc() {}
     public void BombNumberDec() {}
 
+    public boolean openDoor() {
+        Position position = direction.nextPosition(getPosition());
+        Decor go = game.getGrid().get(position);
+        if (go instanceof DoorNextClosed && keys > 0) {
+            keys--;
+            return true;
+        }
+        return false;
+    }
 
+    public int getBombBagCapacity() {
+        return bombBagCapacity;
+    }
 
+    public int getBombRange() {
+        return bombRange;
+    }
 
+    public int getKeys() {
+        return keys;
+    }
+
+    public int getAvailableBombs() {
+        return availableBombs;
+    }
 
     public boolean isWinner() {
-        return false;
+        return game.getGrid().get(getPosition()) instanceof Princess;
     }
 }

@@ -10,8 +10,6 @@ import fr.ubx.poo.ubomb.go.decor.Box;
 import fr.ubx.poo.ubomb.go.decor.bonus.*;
 import javafx.scene.layout.Pane;
 
-import javax.swing.*;
-
 import static fr.ubx.poo.ubomb.view.ImageResource.*;
 
 
