@@ -9,6 +9,7 @@ import fr.ubx.poo.ubomb.game.Game;
 import fr.ubx.poo.ubomb.game.Position;
 import fr.ubx.poo.ubomb.go.GameObject;
 import fr.ubx.poo.ubomb.go.Movable;
+import fr.ubx.poo.ubomb.go.decor.Monster;
 
 
 public class Player extends GameObject implements Movable {
@@ -16,6 +17,9 @@ public class Player extends GameObject implements Movable {
     public Direction direction;
     private boolean moveRequested = false;
     private int lives;
+    private int bombNb;
+    private int bombRange;
+    private int keys;
 
     public Player(Game game, Position position, int lives) {
         super(game, position);
@@ -26,6 +30,10 @@ public class Player extends GameObject implements Movable {
     public int getLives() {
         return lives;
     }
+
+    public void loseLive(int lives) { this.lives -= lives; }
+
+    public void loseLive() { loseLive(1); }
 
     public Direction getDirection() {
         return direction;
@@ -40,14 +48,24 @@ public class Player extends GameObject implements Movable {
     }
 
     public final boolean canMove(Direction direction) {
+        Position nextPos = direction.nextPosition(getPosition());
+        GameObject obj = game.getGrid().get(nextPos);
+        //Check collision with obstacle
+        if (obj != null) {
+            return obj.isWalkable(this);
+        }
+        int height = game.getGrid().getHeight();
+        int width = game.getGrid().getWidth();
+        //Check collision with the grid
+        if (nextPos.getX() < 0 || nextPos.getY() < 0 || nextPos.getX() >= width || nextPos.getY() >= height) return false;
         return true;
     }
 
 
 
     public void update(long now) {
-
         if (moveRequested) {
+            if (game.getGrid().get(direction.nextPosition(getPosition())) instanceof Monster) loseLive();
             if (canMove(direction)) {
                 doMove(direction);
             }

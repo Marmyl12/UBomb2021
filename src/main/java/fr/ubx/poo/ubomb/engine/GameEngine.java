@@ -110,7 +110,7 @@ public final class GameEngine {
 
 
     private void checkCollision(long now) {
-        int height = game.getGrid().getHeight();
+        /*int height = game.getGrid().getHeight();
         int width = game.getGrid().getWidth();
 
         Position b = player.getPosition();
@@ -146,7 +146,7 @@ public final class GameEngine {
                     player.setPosition(Down);
 
             }
-
+     */
 
     }
 
