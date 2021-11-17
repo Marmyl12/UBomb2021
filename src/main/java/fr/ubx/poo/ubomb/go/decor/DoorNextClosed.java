@@ -8,6 +8,6 @@ public class DoorNextClosed extends Decor {
 
     @Override
     public boolean isWalkable(Player player) {
-        return true;
+        return false;
     }
 }
