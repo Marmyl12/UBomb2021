@@ -130,7 +130,10 @@ public final class GameEngine {
         } else if (input.isKey()) {
             if (player.openDoor()) {
                 Position position = player.getDirection().nextPosition(player.getPosition());
-                game.getGrid().replace(position, new DoorNextOpened(position));
+                game.getGrid().get(position).remove();
+                cleanupSprites();
+                game.getGrid().set(position, new DoorNextOpened(position));
+                sprites.add(SpriteFactory.create(layer, game.getGrid().get(position)));
             }
         }
         input.clear();

@@ -36,12 +36,6 @@ public class Grid {
             elements.put(position, decor);
     }
 
-    public void replace(Position position, Decor decor) {
-        if (decor != null) {
-            elements.replace(position, decor);
-        }
-    }
-
     public void remove(Position position) {
         elements.remove(position);
     }

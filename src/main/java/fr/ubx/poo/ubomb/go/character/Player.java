@@ -112,13 +112,13 @@ public class Player extends GameObject implements Movable {
     // Example of methods to define by the player
     public void takeDoor(int gotoLevel) {}
     public void takeHeart() {
-        this.lives+=1;
+        lives++;
     }
-    public void takeKey() {this.keys+=1;}
-    public void takeBombRangeInc() {this.bombRange+=1;}
-    public void takeBombRangeDec() {this.bombRange-=1;}
-    public void BombNumberInc() {this.bombBagCapacity+=1;}
-    public void BombNumberDec() {this.bombBagCapacity-=1;}
+    public void takeKey() { keys++; }
+    public void takeBombRangeInc() { bombRange++; }
+    public void takeBombRangeDec() { bombRange--; }
+    public void BombNumberInc() { bombBagCapacity++; }
+    public void BombNumberDec() { bombBagCapacity--; }
 
     public boolean openDoor() {
         Position position = direction.nextPosition(getPosition());
