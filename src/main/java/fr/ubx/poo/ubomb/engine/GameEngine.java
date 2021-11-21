@@ -115,11 +115,12 @@ public final class GameEngine {
 
     }
     private void createBox() {
+        if((player.pushBox())){
         int height = game.getGrid().getHeight();
         int width = game.getGrid().getWidth();
         Position position = player.getDirection().nextPosition(player.getPosition());
         Position nextpos = player.getDirection().nextPosition(position);
-        if((player.pushBox())&& (! (nextpos.getX() < 0 || nextpos.getY() < 0 || nextpos.getX() >= width || nextpos.getY() >= height))){
+        if((! (nextpos.getX() < 0 || nextpos.getY() < 0 || nextpos.getX() >= width || nextpos.getY() >= height))){
             //System.out.println("box");
             game.getGrid().get(position).remove();
             cleanupSprites();
@@ -128,7 +129,7 @@ public final class GameEngine {
 
         }
 
-    }
+    }}
 
     private void processInput(long now) {
         if (input.isExit()) {
