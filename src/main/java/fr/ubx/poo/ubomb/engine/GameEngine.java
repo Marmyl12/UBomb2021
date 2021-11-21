@@ -120,7 +120,7 @@ public final class GameEngine {
         Position position = player.getDirection().nextPosition(player.getPosition());
         Position nextpos = player.getDirection().nextPosition(position);
         if((player.pushBox())&& (! (nextpos.getX() < 0 || nextpos.getY() < 0 || nextpos.getX() >= width || nextpos.getY() >= height))){
-            System.out.println("box");
+            //System.out.println("box");
             game.getGrid().get(position).remove();
             cleanupSprites();
             game.getGrid().set(nextpos, new Box(nextpos));
