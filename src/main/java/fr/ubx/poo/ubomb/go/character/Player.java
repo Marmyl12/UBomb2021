@@ -82,19 +82,14 @@ public class Player extends GameObject implements Movable {
     public void doMove(Direction direction) {
         // Check if we need to pick something up
         Position nextPos = direction.nextPosition(getPosition());
-        Position nextn = direction.nextPosition(nextPos);
-        Position nextn2 = direction.nextPosition(nextn);
+
         setPosition(nextPos);
         Decor go = game.getGrid().get(nextPos);
-        Decor Nextdec = game.getGrid().get(nextn);
-        Decor Next2 = game.getGrid().get(nextn2);
         if (go instanceof Bonus) {
             ((Bonus) go).takenBy(this);
             go.remove();
         }
-        if ((Nextdec instanceof Box)&& Next2==null) {
-            Nextdec.remove();
-        }
+
     }
 
     @Override
@@ -106,8 +101,15 @@ public class Player extends GameObject implements Movable {
     public void explode() {
     }
 
-    public void pushBox() {
-
+    public boolean pushBox() {
+        Position Pos = direction.nextPosition(getPosition());
+        Position nextn = direction.nextPosition(Pos);
+        Decor d1 = game.getGrid().get(Pos);
+        Decor d2 = game.getGrid().get(nextn);
+        if ((d1 instanceof Box) && d2 == null) {
+            return true;
+        }
+        return false;
     }
     // Example of methods to define by the player
     public void takeDoor(int gotoLevel) {}

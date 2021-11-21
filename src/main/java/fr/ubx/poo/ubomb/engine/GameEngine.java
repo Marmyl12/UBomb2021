@@ -9,6 +9,7 @@ import fr.ubx.poo.ubomb.game.Game;
 import fr.ubx.poo.ubomb.game.Position;
 import fr.ubx.poo.ubomb.go.GameObject;
 import fr.ubx.poo.ubomb.go.character.Player;
+import fr.ubx.poo.ubomb.go.decor.Box;
 import fr.ubx.poo.ubomb.go.decor.Decor;
 import fr.ubx.poo.ubomb.go.decor.DoorNextOpened;
 import fr.ubx.poo.ubomb.go.decor.Stone;
@@ -113,6 +114,21 @@ public final class GameEngine {
     private void checkCollision(long now) {
 
     }
+    private void createBox() {
+        int height = game.getGrid().getHeight();
+        int width = game.getGrid().getWidth();
+        Position position = player.getDirection().nextPosition(player.getPosition());
+        Position nextpos = player.getDirection().nextPosition(position);
+        if((player.pushBox())&& (! (nextpos.getX() < 0 || nextpos.getY() < 0 || nextpos.getX() >= width || nextpos.getY() >= height))){
+            System.out.println("box");
+            game.getGrid().get(position).remove();
+            cleanupSprites();
+            game.getGrid().set(nextpos, new Box(nextpos));
+            sprites.add(SpriteFactory.create(layer, game.getGrid().get(nextpos)));
+
+        }
+
+    }
 
     private void processInput(long now) {
         if (input.isExit()) {
@@ -121,19 +137,24 @@ public final class GameEngine {
             System.exit(0);
         } else if (input.isMoveDown()) {
             player.requestMove(Direction.DOWN);
+            createBox();
         } else if (input.isMoveLeft()) {
             player.requestMove(Direction.LEFT);
+            createBox();
         } else if (input.isMoveRight()) {
             player.requestMove(Direction.RIGHT);
+            createBox();
         } else if (input.isMoveUp()) {
             player.requestMove(Direction.UP);
+            createBox();
         } else if (input.isKey()) {
             if (player.openDoor()) {
                 Position position = player.getDirection().nextPosition(player.getPosition());
+                Position nextpos = player.getDirection().nextPosition(position);
                 game.getGrid().get(position).remove();
                 cleanupSprites();
-                game.getGrid().set(position, new DoorNextOpened(position));
-                sprites.add(SpriteFactory.create(layer, game.getGrid().get(position)));
+                game.getGrid().set(position, new DoorNextOpened(nextpos));
+                sprites.add(SpriteFactory.create(layer, game.getGrid().get(nextpos)));
             }
         }
         input.clear();
