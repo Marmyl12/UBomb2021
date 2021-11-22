@@ -13,88 +13,30 @@ import fr.ubx.poo.ubomb.go.decor.*;
 import fr.ubx.poo.ubomb.go.decor.bonus.Bonus;
 
 
-public class Player extends GameObject implements Movable {
+public class Player extends Character {
 
-    public Direction direction;
-    private boolean moveRequested = false;
-    private int lives;
     private int bombBagCapacity;
     private int availableBombs;
     private int bombRange;
     private int keys;
 
     public Player(Game game, Position position, int lives, int bombBagCapacity, int bombRange) {
-        super(game, position);
-        this.direction = Direction.DOWN;
-        this.lives = lives;
+        super(game, position, lives);
         this.bombBagCapacity = bombBagCapacity;
         availableBombs = bombBagCapacity;
         this.bombRange = bombRange;
         this.keys = 0;
     }
 
-    public int getLives() {
-        return lives;
-    }
-
-    public void loseLive(int lives) { this.lives -= lives; }
-
-    public void loseLive() { loseLive(1); }
-
-    public Direction getDirection() {
-        return direction;
-    }
-
-    public void requestMove(Direction direction) {
-        if (direction != this.direction) {
-            this.direction = direction;
-            setModified(true);
-        }
-        moveRequested = true;
-    }
-
-    public final boolean canMove(Direction direction) {
-        Position nextPos = direction.nextPosition(getPosition());
-        GameObject obj = game.getGrid().get(nextPos);
-        //Check collision with obstacle
-        if (obj != null) {
-            return obj.isWalkable(this);
-        }
-        int height = game.getGrid().getHeight();
-        int width = game.getGrid().getWidth();
-        //Check collision with the grid
-        if (nextPos.getX() < 0 || nextPos.getY() < 0 || nextPos.getX() >= width || nextPos.getY() >= height) return false;
-        return true;
-    }
-
-
-
-    public void update(long now) {
-        if (moveRequested) {
-            if (game.getGrid().get(direction.nextPosition(getPosition())) instanceof Monster) loseLive();
-            if (canMove(direction)) {
-                doMove(direction);
-            }
-        }
-        moveRequested = false;
-    }
-
+    @Override
     public void doMove(Direction direction) {
-        // Check if we need to pick something up
-        Position nextPos = direction.nextPosition(getPosition());
-
-        setPosition(nextPos);
-        Decor go = game.getGrid().get(nextPos);
+        super.doMove(direction);
+        Decor go = game.getGrid().get(getPosition());
         if (go instanceof Bonus) {
             ((Bonus) go).takenBy(this);
             go.remove();
         }
 
-    }
-
-    @Override
-    public boolean isWalkable(Player player) {
-        return true;
     }
 
     @Override
@@ -106,15 +48,12 @@ public class Player extends GameObject implements Movable {
         Position nextn = direction.nextPosition(Pos);
         Decor d1 = game.getGrid().get(Pos);
         Decor d2 = game.getGrid().get(nextn);
-        if ((d1 instanceof Box) && d2 == null) {
-            return true;
-        }
-        return false;
+        return (d1 instanceof Box) && d2 == null;
     }
     // Example of methods to define by the player
     public void takeDoor(int gotoLevel) {}
     public void takeHeart() {
-        lives++;
+        setLives(getLives()+1);
     }
     public void takeKey() { keys++; }
     public void takeBombRangeInc() { bombRange++; }
@@ -130,6 +69,10 @@ public class Player extends GameObject implements Movable {
             return true;
         }
         return false;
+    }
+
+    public void takeDamage() {
+        System.out.println("Ouch");
     }
 
     public int getBombBagCapacity() {

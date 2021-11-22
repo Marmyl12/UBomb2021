@@ -8,6 +8,7 @@ import fr.ubx.poo.ubomb.game.Direction;
 import fr.ubx.poo.ubomb.game.Game;
 import fr.ubx.poo.ubomb.game.Position;
 import fr.ubx.poo.ubomb.go.GameObject;
+import fr.ubx.poo.ubomb.go.character.Monster;
 import fr.ubx.poo.ubomb.go.character.Player;
 import fr.ubx.poo.ubomb.go.decor.Box;
 import fr.ubx.poo.ubomb.go.decor.Decor;
@@ -81,6 +82,9 @@ public final class GameEngine {
             sprites.add(SpriteFactory.create(layer, decor));
             decor.setModified(true);
         }
+        for (Monster monster : game.getMonsters()) {
+            sprites.add(SpriteFactory.create(layer, monster));
+        }
         sprites.add(new SpritePlayer(layer, player));
     }
 
@@ -112,7 +116,12 @@ public final class GameEngine {
 
 
     private void checkCollision(long now) {
-
+        List<GameObject> gos = game.getGameObjects(player.getPosition());
+        for (GameObject go : gos) {
+            if (go instanceof Monster) {
+                player.takeDamage();
+            }
+        }
     }
     private void createBox() {
         if((player.pushBox())){

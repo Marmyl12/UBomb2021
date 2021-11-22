@@ -10,8 +10,4 @@ public class Tree extends Decor {
     public Tree(Position position) {
         super(position);
     }
-    @Override
-    public boolean isWalkable(Player player) {
-        return false;
-    }
 }

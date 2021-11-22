@@ -12,8 +12,4 @@ public class Stone extends Decor {
         super(position);
     }
 
-    @Override
-    public boolean isWalkable(Player player) {
-        return false;
-    }
 }

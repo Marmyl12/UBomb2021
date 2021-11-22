@@ -5,6 +5,7 @@
 package fr.ubx.poo.ubomb.go.decor;
 
 import fr.ubx.poo.ubomb.game.Position;
+import fr.ubx.poo.ubomb.go.character.Character;
 import fr.ubx.poo.ubomb.go.character.Player;
 
 public class Princess extends Decor {
@@ -12,7 +13,7 @@ public class Princess extends Decor {
         super(position);
     }
     @Override
-    public boolean isWalkable(Player player) {
+    public boolean isWalkable(Character character) {
         return true;
     }
 }
