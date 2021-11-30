@@ -7,6 +7,7 @@ package fr.ubx.poo.ubomb.engine;
 import fr.ubx.poo.ubomb.game.Direction;
 import fr.ubx.poo.ubomb.game.Game;
 import fr.ubx.poo.ubomb.game.Position;
+import fr.ubx.poo.ubomb.go.Bomb;
 import fr.ubx.poo.ubomb.go.GameObject;
 import fr.ubx.poo.ubomb.go.character.Monster;
 import fr.ubx.poo.ubomb.go.character.Player;
@@ -96,7 +97,6 @@ public final class GameEngine {
 
                 // Do actions
                 update(now);
-                createNewBombs(now);
                 checkCollision(now);
                 checkExplosions();
 
@@ -112,6 +112,9 @@ public final class GameEngine {
     }
 
     private void createNewBombs(long now) {
+        Bomb bomb = new Bomb(player.getPosition());
+        sprites.add(new SpriteBomb(layer,bomb));
+
     }
 
 
@@ -157,6 +160,9 @@ public final class GameEngine {
         } else if (input.isMoveUp()) {
             player.requestMove(Direction.UP);
             createBox();
+        } else if (input.isBomb()) {
+            createNewBombs(now);
+
         } else if (input.isKey()) {
             if (player.openDoor()) {
                 Position position = player.getDirection().nextPosition(player.getPosition());

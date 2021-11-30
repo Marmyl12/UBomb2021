@@ -5,6 +5,7 @@
 package fr.ubx.poo.ubomb.game;
 
 
+import fr.ubx.poo.ubomb.go.Bomb;
 import fr.ubx.poo.ubomb.go.GameObject;
 import fr.ubx.poo.ubomb.go.character.Monster;
 import fr.ubx.poo.ubomb.go.character.Player;
@@ -28,6 +29,7 @@ public class Game {
     public final long monsterInvisibilityTime;
     private final Grid grid;
     private final Player player;
+    private final Bomb bomb;
     private ArrayList<Monster> monsters = new ArrayList<>();
 
     public Game(String worldPath) {
@@ -53,7 +55,7 @@ public class Game {
                 throw new RuntimeException("Invalid configuration format");
             Position playerPosition = new Position(Integer.parseInt(tokens[0]), Integer.parseInt(tokens[1]));
             player = new Player(this, playerPosition, playerLives, bombBagCapacity, 1);
-
+            bomb = new Bomb(playerPosition);
 
         } catch (IOException ex) {
             System.err.println("Error loading configuration");
@@ -70,6 +72,8 @@ public class Game {
         List<GameObject> gos = new LinkedList<>();
         if (getPlayer().getPosition().equals(position))
             gos.add(player);
+        if (getBomb().getPosition().equals(position))
+            gos.add(bomb);
         for (Monster monster : monsters) {
             if (monster.getPosition().equals(position))
                 gos.add(monster);
@@ -79,6 +83,11 @@ public class Game {
 
     public Player getPlayer() {
         return this.player;
+    }
+
+
+    public Bomb getBomb() {
+        return this.bomb;
     }
 
     public void addMonster(Monster monster) { monsters.add(monster); }
