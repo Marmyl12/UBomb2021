@@ -14,7 +14,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Properties;
@@ -29,8 +28,9 @@ public class Game {
     public final long monsterInvisibilityTime;
     private final Grid grid;
     private final Player player;
-    private final Bomb bomb;
-    private ArrayList<Monster> monsters = new ArrayList<>();
+    //private final Bomb bomb;
+    private final LinkedList<Monster> monsters = new LinkedList<>();
+    private final LinkedList<Bomb> bombs = new LinkedList<>();
 
     public Game(String worldPath) {
         try (InputStream input = new FileInputStream(new File(worldPath, "config.properties"))) {
@@ -46,7 +46,7 @@ public class Game {
 
             // Load the world
             String prefix = prop.getProperty("prefix");
-            GridRepo gridRepo = new GridRepoSample(this);
+            GridRepo gridRepo = new GridRepoFile(this, worldPath);
             this.grid = gridRepo.load(1, prefix + 1);
 
             // Create the player
@@ -55,7 +55,7 @@ public class Game {
                 throw new RuntimeException("Invalid configuration format");
             Position playerPosition = new Position(Integer.parseInt(tokens[0]), Integer.parseInt(tokens[1]));
             player = new Player(this, playerPosition, playerLives, bombBagCapacity, 1);
-            bomb = new Bomb(playerPosition);
+            //bomb = new Bomb(playerPosition);
 
         } catch (IOException ex) {
             System.err.println("Error loading configuration");
@@ -72,8 +72,8 @@ public class Game {
         List<GameObject> gos = new LinkedList<>();
         if (getPlayer().getPosition().equals(position))
             gos.add(player);
-        if (getBomb().getPosition().equals(position))
-            gos.add(bomb);
+        //if (getBomb().getPosition().equals(position))
+            //gos.add(bomb);
         for (Monster monster : monsters) {
             if (monster.getPosition().equals(position))
                 gos.add(monster);
@@ -86,14 +86,18 @@ public class Game {
     }
 
 
-    public Bomb getBomb() {
+    /*public Bomb getBomb() {
         return this.bomb;
-    }
+    }*/
 
     public void addMonster(Monster monster) { monsters.add(monster); }
 
-    public ArrayList<Monster> getMonsters() {
+    public List<Monster> getMonsters() {
         return monsters;
+    }
+
+    public List<Bomb> getBombs() {
+        return bombs;
     }
 
     public boolean inside(Position position) {

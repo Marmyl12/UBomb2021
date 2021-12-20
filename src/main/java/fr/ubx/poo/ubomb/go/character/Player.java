@@ -7,8 +7,6 @@ package fr.ubx.poo.ubomb.go.character;
 import fr.ubx.poo.ubomb.game.Direction;
 import fr.ubx.poo.ubomb.game.Game;
 import fr.ubx.poo.ubomb.game.Position;
-import fr.ubx.poo.ubomb.go.GameObject;
-import fr.ubx.poo.ubomb.go.Movable;
 import fr.ubx.poo.ubomb.go.decor.*;
 import fr.ubx.poo.ubomb.go.decor.bonus.Bonus;
 
@@ -19,6 +17,7 @@ public class Player extends Character {
     private int availableBombs;
     private int bombRange;
     private int keys;
+    private long lastTimeDamaged;
 
     public Player(Game game, Position position, int lives, int bombBagCapacity, int bombRange) {
         super(game, position, lives);
@@ -26,6 +25,7 @@ public class Player extends Character {
         availableBombs = bombBagCapacity;
         this.bombRange = bombRange;
         this.keys = 0;
+        lastTimeDamaged = System.nanoTime();
     }
 
     @Override
@@ -72,7 +72,13 @@ public class Player extends Character {
     }
 
     public void takeDamage() {
-        System.out.println("Ouch");
+        loseLive();
+        lastTimeDamaged = System.nanoTime();
+    }
+
+    //Return true if the player has been hit since less than 1 second (1 billion nanoseconds)
+    public boolean isInvincible() {
+        return lastTimeDamaged + 1_000_000_000 > System.nanoTime();
     }
 
     public int getBombBagCapacity() {
@@ -90,6 +96,8 @@ public class Player extends Character {
     public int getAvailableBombs() {
         return availableBombs;
     }
+
+    public void useBomb() { availableBombs--; }
 
     public boolean isWinner() {
         return game.getGrid().get(getPosition()) instanceof Princess;

@@ -5,6 +5,7 @@
 package fr.ubx.poo.ubomb.view;
 
 import fr.ubx.poo.ubomb.game.Position;
+import fr.ubx.poo.ubomb.go.Bomb;
 import fr.ubx.poo.ubomb.go.GameObject;
 import javafx.scene.effect.Effect;
 import javafx.scene.image.Image;
@@ -42,6 +43,10 @@ public class Sprite {
     }
 
     public void updateImage() {
+        if (!(gameObject instanceof Bomb)) return;
+        if (((Bomb) gameObject).hasPhaseChanged()) {
+            this.image = SpriteFactory.getPhaseImage((Bomb) gameObject);
+        }
     }
 
     public Position getPosition() {

@@ -46,7 +46,7 @@ public class GridRepoSample extends GridRepo {
                 GameObject go = processEntityCode(entityCode, position);
                 if (go instanceof Decor) {
                     grid.set(position, (Decor) go);
-                } else if (go instanceof fr.ubx.poo.ubomb.go.character.Monster) {
+                } else if (go instanceof Monster) {
                     getGame().addMonster((Monster) go);
                 }
             }

@@ -109,11 +109,12 @@ public final class GameEngine {
     }
 
     private void checkExplosions() {
+
     }
 
     private void createNewBombs(long now) {
-        Bomb bomb = new Bomb(player.getPosition());
-        sprites.add(new SpriteBomb(layer,bomb));
+        //Bomb bomb = new Bomb(player.getPosition());
+        //sprites.add(new SpriteBomb(layer,bomb));
 
     }
 
@@ -121,7 +122,7 @@ public final class GameEngine {
     private void checkCollision(long now) {
         List<GameObject> gos = game.getGameObjects(player.getPosition());
         for (GameObject go : gos) {
-            if (go instanceof Monster) {
+            if (go instanceof Monster && !player.isInvincible()) {
                 player.takeDamage();
             }
         }
