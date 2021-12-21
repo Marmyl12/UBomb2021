@@ -29,6 +29,7 @@ public class Game {
     private final List<Grid> grids = new LinkedList<>();
     private final Player player;
     private int currentLevel;
+    private boolean changeLevel;
 
     public Game(String worldPath) {
         try (InputStream input = new FileInputStream(new File(worldPath, "config.properties"))) {
@@ -57,6 +58,8 @@ public class Game {
             Position playerPosition = new Position(Integer.parseInt(tokens[0]), Integer.parseInt(tokens[1]));
             player = new Player(this, playerPosition, playerLives, bombBagCapacity, 1);
 
+            changeLevel = false;
+
         } catch (IOException ex) {
             System.err.println("Error loading configuration");
             throw new RuntimeException("Invalid configuration format");
@@ -69,6 +72,14 @@ public class Game {
 
     public Grid getGrid() {
         return getGrid(currentLevel);
+    }
+
+    public boolean isChangeLevel() {
+        return changeLevel;
+    }
+
+    public void setChangeLevel(boolean changeLevel) {
+        this.changeLevel = changeLevel;
     }
 
     public void setCurrentLevel(int currentLevel) {

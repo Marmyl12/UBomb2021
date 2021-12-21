@@ -46,7 +46,7 @@ public final class SpriteFactory {
         if (gameObject instanceof DoorNextOpened)
             return new Sprite(layer, DOOR_OPENED.getImage(), gameObject);
         if (gameObject instanceof DoorPrevOpened) {
-            return new Sprite(layer, DOOR_CLOSED.getImage(), gameObject);
+            return new Sprite(layer, DOOR_OPENED.getImage(), gameObject);
         }
         if (gameObject instanceof Bomb) {
             return new Sprite(layer, BOMB_3.getImage(), gameObject);

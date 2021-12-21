@@ -3,6 +3,8 @@ package fr.ubx.poo.ubomb.game;
 import fr.ubx.poo.ubomb.go.GameObject;
 import fr.ubx.poo.ubomb.go.character.Monster;
 import fr.ubx.poo.ubomb.go.decor.Decor;
+import fr.ubx.poo.ubomb.go.decor.DoorNextClosed;
+import fr.ubx.poo.ubomb.go.decor.DoorNextOpened;
 import fr.ubx.poo.ubomb.go.decor.DoorPrevOpened;
 
 import java.io.File;
@@ -45,7 +47,8 @@ public class GridRepoFile extends GridRepo {
                     if (go instanceof Decor) {
                         if (go instanceof DoorPrevOpened) {
                             grid.setStartPos(position);
-                            System.out.println("hey");
+                        } else if (go instanceof DoorNextOpened || go instanceof DoorNextClosed) {
+                            grid.setEndPos(position);
                         }
                         grid.set(position, (Decor) go);
                     } else if (go instanceof Monster) {
