@@ -26,11 +26,9 @@ public class Game {
     public final int levels;
     public final long playerInvisibilityTime;
     public final long monsterInvisibilityTime;
-    private final Grid grid;
+    private final List<Grid> grids = new LinkedList<>();
     private final Player player;
-    //private final Bomb bomb;
-    private final LinkedList<Monster> monsters = new LinkedList<>();
-    private final LinkedList<Bomb> bombs = new LinkedList<>();
+    private int currentLevel;
 
     public Game(String worldPath) {
         try (InputStream input = new FileInputStream(new File(worldPath, "config.properties"))) {
@@ -47,7 +45,10 @@ public class Game {
             // Load the world
             String prefix = prop.getProperty("prefix");
             GridRepo gridRepo = new GridRepoFile(this, worldPath);
-            this.grid = gridRepo.load(1, prefix + 1);
+            for (int i = 0 ; i < levels ; i++) {
+                this.grids.add(gridRepo.load(i+1, prefix));
+            }
+            currentLevel = 0;
 
             // Create the player
             String[] tokens = prop.getProperty("player").split("[ :x]+");
@@ -55,7 +56,6 @@ public class Game {
                 throw new RuntimeException("Invalid configuration format");
             Position playerPosition = new Position(Integer.parseInt(tokens[0]), Integer.parseInt(tokens[1]));
             player = new Player(this, playerPosition, playerLives, bombBagCapacity, 1);
-            //bomb = new Bomb(playerPosition);
 
         } catch (IOException ex) {
             System.err.println("Error loading configuration");
@@ -63,8 +63,20 @@ public class Game {
         }
     }
 
+    public Grid getGrid(int level) {
+        return grids.get(level);
+    }
+
     public Grid getGrid() {
-        return grid;
+        return getGrid(currentLevel);
+    }
+
+    public void setCurrentLevel(int currentLevel) {
+        this.currentLevel = currentLevel;
+    }
+
+    public int getCurrentLevel() {
+        return currentLevel;
     }
 
     // Returns the player, monsters and bombs at a given position
@@ -72,11 +84,9 @@ public class Game {
         List<GameObject> gos = new LinkedList<>();
         if (getPlayer().getPosition().equals(position))
             gos.add(player);
-        //if (getBomb().getPosition().equals(position))
-            //gos.add(bomb);
-        for (Monster monster : monsters) {
-            if (monster.getPosition().equals(position))
-                gos.add(monster);
+        for (GameObject entity : getGrid().getEntities()) {
+            if (entity.getPosition().equals(position))
+                gos.add(entity);
         }
         return gos;
     }
@@ -89,16 +99,6 @@ public class Game {
     /*public Bomb getBomb() {
         return this.bomb;
     }*/
-
-    public void addMonster(Monster monster) { monsters.add(monster); }
-
-    public List<Monster> getMonsters() {
-        return monsters;
-    }
-
-    public List<Bomb> getBombs() {
-        return bombs;
-    }
 
     public boolean inside(Position position) {
         return true;

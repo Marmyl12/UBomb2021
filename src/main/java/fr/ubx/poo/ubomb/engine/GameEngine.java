@@ -83,8 +83,8 @@ public final class GameEngine {
             sprites.add(SpriteFactory.create(layer, decor));
             decor.setModified(true);
         }
-        for (Monster monster : game.getMonsters()) {
-            sprites.add(SpriteFactory.create(layer, monster));
+        for (GameObject entity : game.getGrid().getEntities()) {
+            sprites.add(SpriteFactory.create(layer, entity));
         }
         sprites.add(new SpritePlayer(layer, player));
     }
@@ -208,6 +208,11 @@ public final class GameEngine {
             gameLoop.stop();
             showMessage("Gagné", Color.BLUE);
         }
+
+        if (game.getGrid().get(player.getPosition()) instanceof DoorNextOpened) {
+            changeLevel(game.getCurrentLevel()+1);
+        }
+
     }
 
     public void cleanupSprites() {
@@ -228,5 +233,13 @@ public final class GameEngine {
 
     public void start() {
         gameLoop.start();
+    }
+
+    public void changeLevel(int level) {
+        game.setCurrentLevel(level);
+        sprites.forEach(sprite -> cleanUpSprites.add(sprite));
+        cleanupSprites();
+        initialize();
+        player.setPosition(game.getGrid().getStartPos());
     }
 }

@@ -1,10 +1,9 @@
 package fr.ubx.poo.ubomb.game;
 
+import fr.ubx.poo.ubomb.go.GameObject;
 import fr.ubx.poo.ubomb.go.decor.Decor;
 
-import java.util.Collection;
-import java.util.Hashtable;
-import java.util.Map;
+import java.util.*;
 
 public class Grid {
 
@@ -12,11 +11,17 @@ public class Grid {
     private final int height;
 
     private final Map<Position, Decor> elements;
+    private final List<GameObject> entities;
+
+    private Position startPos;
+    private Position endPos;
+
 
     public Grid(int width, int height) {
         this.width = width;
         this.height = height;
         this.elements = new Hashtable<>();
+        this.entities = new LinkedList<>();
     }
 
     public int getWidth() {
@@ -36,6 +41,14 @@ public class Grid {
             elements.put(position, decor);
     }
 
+    public void addEntity(GameObject go) {
+        entities.add(go);
+    }
+
+    public List<GameObject> getEntities() {
+        return entities;
+    }
+
     public void remove(Position position) {
         elements.remove(position);
     }
@@ -44,4 +57,19 @@ public class Grid {
         return elements.values();
     }
 
+    public Position getStartPos() {
+        return startPos;
+    }
+
+    public void setStartPos(Position startPos) {
+        this.startPos = startPos;
+    }
+
+    public Position getEndPos() {
+        return endPos;
+    }
+
+    public void setEndPos(Position endPos) {
+        this.endPos = endPos;
+    }
 }

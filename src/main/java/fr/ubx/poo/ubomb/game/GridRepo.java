@@ -50,7 +50,8 @@ public abstract class GridRepo {
                 return new DoorNextClosed(pos);
             case DoorNextOpened:
                 return new DoorNextOpened(pos);
-
+            case DoorPrevOpened:
+                return new DoorPrevOpened(pos);
             default:
                 return null;
                 // throw new RuntimeException("EntityCode " + entityCode.name() + " not processed");

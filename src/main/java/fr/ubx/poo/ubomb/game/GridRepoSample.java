@@ -47,7 +47,7 @@ public class GridRepoSample extends GridRepo {
                 if (go instanceof Decor) {
                     grid.set(position, (Decor) go);
                 } else if (go instanceof Monster) {
-                    getGame().addMonster((Monster) go);
+                    grid.addEntity(go);
                 }
             }
         }
