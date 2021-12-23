@@ -62,10 +62,8 @@ public abstract class Character extends GameObject implements Movable {
         moveRequested = false;
     }
     public void doMove(Direction direction) {
-        // Check if we need to pick something up
         Position nextPos = direction.nextPosition(getPosition());
         setPosition(nextPos);
-        Decor go = game.getGrid().get(nextPos);
     }
 
     @Override

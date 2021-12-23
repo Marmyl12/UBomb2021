@@ -31,7 +31,7 @@ public abstract class GridRepo {
             case Key:
                 return new Key(pos);
             case Box:
-                return new Box(pos);
+                return new Box(game, pos);
             case Heart:
                 return new Heart(pos);
             case BombRangeInc:

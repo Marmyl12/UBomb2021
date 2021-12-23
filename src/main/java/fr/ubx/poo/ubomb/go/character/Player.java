@@ -7,6 +7,7 @@ package fr.ubx.poo.ubomb.go.character;
 import fr.ubx.poo.ubomb.game.Direction;
 import fr.ubx.poo.ubomb.game.Game;
 import fr.ubx.poo.ubomb.game.Position;
+import fr.ubx.poo.ubomb.go.GameObject;
 import fr.ubx.poo.ubomb.go.Takeable;
 import fr.ubx.poo.ubomb.go.decor.*;
 import fr.ubx.poo.ubomb.go.decor.bonus.Bonus;
@@ -30,12 +31,24 @@ public class Player extends Character {
     }
 
     @Override
+    public boolean canMove(Direction direction) {
+        if (super.canMove(direction)) return true;
+        Decor decor = game.getGrid().get(direction.nextPosition(getPosition()));
+        if (decor instanceof Box) {
+            return ((Box) decor).canMove(direction);
+        }
+        return false;
+    }
+
+    @Override
     public void doMove(Direction direction) {
         super.doMove(direction);
         Decor go = game.getGrid().get(getPosition());
         if (go instanceof Takeable) {
             ((Takeable) go).takenBy(this);
             if (go instanceof Bonus) go.remove();
+        } else if (go instanceof Box) {
+            ((Box) go).doMove(direction);
         }
 
     }
@@ -44,12 +57,8 @@ public class Player extends Character {
     public void explode() {
     }
 
-    public boolean pushBox() {
-        Position Pos = direction.nextPosition(getPosition());
-        Position nextn = direction.nextPosition(Pos);
-        Decor d1 = game.getGrid().get(Pos);
-        Decor d2 = game.getGrid().get(nextn);
-        return (d1 instanceof Box) && d2 == null;
+    public void pushBox(Box box) {
+
     }
     // Example of methods to define by the player
     public void takeDoor(int gotoLevel) {}

@@ -128,22 +128,6 @@ public final class GameEngine {
             }
         }
     }
-    private void createBox() {
-        if((player.pushBox())){
-        int height = game.getGrid().getHeight();
-        int width = game.getGrid().getWidth();
-        Position position = player.getDirection().nextPosition(player.getPosition());
-        Position nextpos = player.getDirection().nextPosition(position);
-        if((! (nextpos.getX() < 0 || nextpos.getY() < 0 || nextpos.getX() >= width || nextpos.getY() >= height))){
-            //System.out.println("box");
-            game.getGrid().get(position).remove();
-            cleanupSprites();
-            game.getGrid().set(nextpos, new Box(nextpos));
-            sprites.add(SpriteFactory.create(layer, game.getGrid().get(nextpos)));
-
-        }
-
-    }}
 
     private void processInput(long now) {
         if (input.isExit()) {
@@ -152,16 +136,12 @@ public final class GameEngine {
             System.exit(0);
         } else if (input.isMoveDown()) {
             player.requestMove(Direction.DOWN);
-            createBox();
         } else if (input.isMoveLeft()) {
             player.requestMove(Direction.LEFT);
-            createBox();
         } else if (input.isMoveRight()) {
             player.requestMove(Direction.RIGHT);
-            createBox();
         } else if (input.isMoveUp()) {
             player.requestMove(Direction.UP);
-            createBox();
         } else if (input.isBomb()) {
             createNewBombs(now);
 
@@ -239,7 +219,7 @@ public final class GameEngine {
     }
 
     public void loadLevel() {
-        sprites.forEach(sprite -> cleanUpSprites.add(sprite));
+        cleanUpSprites.addAll(sprites);
         cleanupSprites();
         initialize();
         game.setChangeLevel(false);

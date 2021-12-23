@@ -32,6 +32,7 @@ public class StatusBar {
         // Status bar
         this.game = game;
 
+
         level.getStyleClass().add("level");
         level.getChildren().add(new ImageView(ImageResource.getDigit(gameLevel)));
 
@@ -54,6 +55,7 @@ public class StatusBar {
         hBox.getStyleClass().add("statusBar");
         hBox.relocate(0, sceneHeight);
         hBox.setPrefSize(sceneWidth, height);
+        hBox.resize(sceneWidth, height);
         root.getChildren().add(hBox);
     }
 
@@ -77,7 +79,7 @@ public class StatusBar {
     }
 
     public void update(Game game) {
-        updateLevel(1);
+        updateLevel(game.getCurrentLevel()+1);
         Player player = game.getPlayer();
         lives.setText(String.valueOf(player.getLives()));
         bombRange.setText(String.valueOf(player.getBombRange()));
