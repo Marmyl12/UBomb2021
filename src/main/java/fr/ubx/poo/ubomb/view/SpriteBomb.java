@@ -9,13 +9,16 @@ import javafx.scene.layout.Pane;
 public class SpriteBomb  extends Sprite {
 
     public SpriteBomb(Pane layer, Bomb bomb) {
-        super(layer, null, bomb);
+        super(layer, ImageResource.getBomb(0), bomb);
         updateImage();
     }
 
-    @Override
     public void updateImage() {
-        Image image =  ImageResource.getBomb((3));
-        setImage(image);
+        Bomb bomb = (Bomb) getGameObject();
+        if (bomb.hasPhaseChanged()) {
+            System.out.println("Changed");
+            setImage(ImageResource.getBomb(bomb.getPhase()));
+            bomb.setModified(true);
+        }
     }
 }

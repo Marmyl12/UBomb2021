@@ -43,10 +43,6 @@ public class Sprite {
     }
 
     public void updateImage() {
-        if (!(gameObject instanceof Bomb)) return;
-        if (((Bomb) gameObject).hasPhaseChanged()) {
-            this.image = SpriteFactory.getPhaseImage((Bomb) gameObject);
-        }
     }
 
     public Position getPosition() {

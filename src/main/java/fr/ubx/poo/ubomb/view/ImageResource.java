@@ -84,7 +84,7 @@ public enum ImageResource {
     public static Image getBomb(int i) {
         if (i < 0 || i > 3)
             throw new IllegalArgumentException();
-        return valueOf("BOMB_"+i).image;
+        return valueOf("BOMB_"+(3-i)).image;
     }
 
 
