@@ -5,6 +5,7 @@
 package fr.ubx.poo.ubomb.view;
 
 import fr.ubx.poo.ubomb.game.Direction;
+import fr.ubx.poo.ubomb.go.character.Monster;
 import fr.ubx.poo.ubomb.go.character.Player;
 import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
@@ -15,20 +16,21 @@ public class SpriteMonster extends Sprite {
 
     private final ColorAdjust effect = new ColorAdjust();
 
-    public SpriteMonster(Pane layer, Player player) {
-        super(layer, null, player);
+    public SpriteMonster(Pane layer, Monster monster) {
+        super(layer, null, monster);
         effect.setBrightness(0.8);
         updateImage();
     }
 
     @Override
     public void updateImage() {
-        Player player = (Player) getGameObject();
-        Image image = getImage(player.getDirection());
+        Monster monster = (Monster) getGameObject();
+        Image image = getImage(monster.getDirection());
         setImage(image);
+
     }
 
     public Image getImage(Direction direction) {
-        return ImageResource.getPlayer(direction);
+        return ImageResource.getMonster(direction);
     }
 }

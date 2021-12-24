@@ -10,8 +10,26 @@ import fr.ubx.poo.ubomb.game.Position;
 import fr.ubx.poo.ubomb.go.GameObject;
 import fr.ubx.poo.ubomb.go.Movable;
 import fr.ubx.poo.ubomb.go.character.Player;
+import fr.ubx.poo.ubomb.go.decor.Box;
 import fr.ubx.poo.ubomb.go.decor.Decor;
 
 public class Monster extends Character  {
+
     public Monster(Game game, Position position, int lives) { super(game, position, lives); }
+
+
+
+
+
+    @Override
+    public void doMove(Direction direction){
+        if(canMove(direction)){
+           Direction test = Direction.random();
+            if(canMove(test))direction = test;
+            super.doMove(direction);
+
+
+}}
+
+
 }

@@ -40,12 +40,14 @@ public final class GameEngine {
     private final String windowTitle;
     private final Game game;
     private final Player player;
+    private final List<Monster> monsters = new LinkedList<>();
     private final List<Sprite> sprites = new LinkedList<>();
     private final Set<Sprite> cleanUpSprites = new HashSet<>();
     private final Stage stage;
     private StatusBar statusBar;
     private Pane layer;
     private Input input;
+    private int Moovecd=50;
 
 
     public GameEngine(final String windowTitle, Game game, final Stage stage) {
@@ -84,6 +86,7 @@ public final class GameEngine {
             decor.setModified(true);
         }
         for (GameObject entity : game.getGrid().getEntities()) {
+            if(entity instanceof Monster) monsters.add((Monster) entity);
             sprites.add(SpriteFactory.create(layer, entity));
             entity.setModified(true);
         }
@@ -178,7 +181,18 @@ public final class GameEngine {
 
 
     private void update(long now) {
+        Moovecd--;
         player.update(now);
+        if(Moovecd< game.monsterVelocity){
+        for (int i =0;i<monsters.size();i++)
+
+              {
+
+                  monsters.get(i).requestMove(Direction.random());
+                  monsters.get(i).update(now);
+
+              }
+              Moovecd=100;}
 
         if (player.getLives() == 0) {
             gameLoop.stop();

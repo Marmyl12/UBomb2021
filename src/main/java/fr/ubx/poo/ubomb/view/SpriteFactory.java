@@ -39,8 +39,6 @@ public final class SpriteFactory {
             return new Sprite(layer, BONUS_BOMB_RANGE_DEC.getImage(), gameObject);
         if (gameObject instanceof Princess)
             return new Sprite(layer, PRINCESS.getImage(), gameObject);
-        if (gameObject instanceof Monster)
-            return new Sprite(layer, MONSTER_DOWN.getImage(), gameObject);
         if (gameObject instanceof DoorNextClosed)
             return new Sprite(layer, DOOR_CLOSED.getImage(), gameObject);
         if (gameObject instanceof DoorNextOpened)
@@ -48,8 +46,12 @@ public final class SpriteFactory {
         if (gameObject instanceof DoorPrevOpened) {
             return new Sprite(layer, DOOR_OPENED.getImage(), gameObject);
         }
+
+        if (gameObject instanceof Monster)
+            return new SpriteMonster(layer,(Monster)gameObject);
+
         if (gameObject instanceof Bomb) {
-            return new Sprite(layer, BOMB_3.getImage(), gameObject);
+            return new SpriteBomb(layer,(Bomb) gameObject);
         }
 
 
