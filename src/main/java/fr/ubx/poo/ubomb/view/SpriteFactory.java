@@ -45,25 +45,12 @@ public final class SpriteFactory {
             return new Sprite(layer, DOOR_CLOSED.getImage(), gameObject);
         if (gameObject instanceof DoorNextOpened)
             return new Sprite(layer, DOOR_OPENED.getImage(), gameObject);
-        if (gameObject instanceof DoorPrevOpened) {
+        if (gameObject instanceof DoorPrevOpened)
             return new Sprite(layer, DOOR_OPENED.getImage(), gameObject);
-        }
-        if (gameObject instanceof Bomb) {
-            return new Sprite(layer, BOMB_3.getImage(), gameObject);
-        }
+
 
 
         throw new RuntimeException("Unsupported sprite for decor " + gameObject);
     }
 
-    //return the image that the sprite should use for the current phase
-    public static Image getPhaseImage(Bomb bomb) {
-        switch (bomb.getPhase()) {
-            case 0: return BOMB_3.getImage();
-            case 1: return BOMB_2.getImage();
-            case 2: return BOMB_1.getImage();
-            case 3: return BOMB_0.getImage();
-            default: return EXPLOSION.getImage();
-        }
-    }
 }

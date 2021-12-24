@@ -114,8 +114,6 @@ public final class GameEngine {
     }
 
     private void createNewBombs(long now) {
-        //Bomb bomb = new Bomb(player.getPosition());
-        //sprites.add(new SpriteBomb(layer,bomb));
 
     }
 
@@ -143,8 +141,9 @@ public final class GameEngine {
         } else if (input.isMoveUp()) {
             player.requestMove(Direction.UP);
         } else if (input.isBomb()) {
-            createNewBombs(now);
-
+            Bomb bomb = new Bomb(player.getPosition());
+            game.getGrid().addEntity(bomb);
+            sprites.add(new SpriteBomb(layer, bomb));
         } else if (input.isKey()) {
             if (player.openDoor()) {
                 Position position = player.getDirection().nextPosition(player.getPosition());
@@ -211,7 +210,10 @@ public final class GameEngine {
     }
 
     private void render() {
-        sprites.forEach(Sprite::render);
+        sprites.forEach(sprite -> {
+            sprite.updateImage();
+            sprite.render();
+        });
     }
 
     public void start() {
