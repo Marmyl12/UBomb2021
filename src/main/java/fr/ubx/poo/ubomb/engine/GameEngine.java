@@ -191,7 +191,7 @@ public final class GameEngine {
                   monsters.get(i).update(now);
 
               }
-              Moovecd=100;}
+              Moovecd=50;}
 
         if (player.getLives() == 0) {
             gameLoop.stop();

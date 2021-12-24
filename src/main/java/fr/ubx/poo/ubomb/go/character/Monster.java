@@ -21,15 +21,10 @@ public class Monster extends Character  {
 
 
 
-    @Override
-    public void doMove(Direction direction){
-        if(canMove(direction)){
-           Direction test = Direction.random();
-            if(canMove(test))direction = test;
-            super.doMove(direction);
 
 
-}}
+
+
 
 
 }
