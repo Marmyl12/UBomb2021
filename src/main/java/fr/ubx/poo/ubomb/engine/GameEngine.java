@@ -47,7 +47,7 @@ public final class GameEngine {
     private StatusBar statusBar;
     private Pane layer;
     private Input input;
-    private int Moovecd=50;
+    private int Moovecd=80;
 
 
     public GameEngine(final String windowTitle, Game game, final Stage stage) {
@@ -183,15 +183,13 @@ public final class GameEngine {
         Moovecd--;
         player.update(now);
         if(Moovecd< game.monsterVelocity){
-        for (int i =0;i<monsters.size();i++)
+            for (Monster monster : monsters) {
 
-              {
+                monster.requestMove(Direction.random());
+                monster.update(now);
 
-                  monsters.get(i).requestMove(Direction.random());
-                  monsters.get(i).update(now);
-
-              }
-              Moovecd=50;}
+            }
+              Moovecd=80;}
 
         if (player.getLives() == 0) {
             gameLoop.stop();
@@ -237,6 +235,7 @@ public final class GameEngine {
     public void loadLevel() {
         cleanUpSprites.addAll(sprites);
         cleanupSprites();
+        monsters.clear();
         initialize();
         game.setChangeLevel(false);
     }

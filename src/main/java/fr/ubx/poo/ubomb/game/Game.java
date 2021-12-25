@@ -21,7 +21,7 @@ import java.util.Properties;
 public class Game {
 
     public final int bombBagCapacity;
-    public final int monsterVelocity;
+    public int monsterVelocity;
     public final int playerLives;
     public final int levels;
     public final long playerInvisibilityTime;
@@ -84,6 +84,12 @@ public class Game {
 
     public void setCurrentLevel(int currentLevel) {
         this.currentLevel = currentLevel;
+    }
+
+    public void setCurrentVelocity(int currentLevel) {
+        if(currentLevel==2) monsterVelocity=15;
+        if(currentLevel==3) monsterVelocity=20;
+
     }
 
     public int getCurrentLevel() {
