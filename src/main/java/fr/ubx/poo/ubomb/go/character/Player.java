@@ -16,18 +16,18 @@ import fr.ubx.poo.ubomb.go.decor.bonus.Bonus;
 public class Player extends Character {
 
     private int bombBagCapacity;
-    private int availableBombs;
     private int bombRange;
     private int keys;
     private long lastTimeDamaged;
+    private int placedBombs;
 
     public Player(Game game, Position position, int lives, int bombBagCapacity, int bombRange) {
         super(game, position, lives);
         this.bombBagCapacity = bombBagCapacity;
-        availableBombs = bombBagCapacity;
         this.bombRange = bombRange;
         this.keys = 0;
         lastTimeDamaged = System.nanoTime();
+        placedBombs = 0;
     }
 
     @Override
@@ -57,9 +57,15 @@ public class Player extends Character {
     public void explode() {
     }
 
-    public void pushBox(Box box) {
-
+    //return true if the player can place a bomb and increase placed bombs
+    public boolean useBomb() {
+        if (placedBombs < bombBagCapacity) {
+            placedBombs++;
+            return true;
+        }
+        return false;
     }
+
     // Example of methods to define by the player
     public void takeDoor(int gotoLevel) {}
     public void takeHeart() {
@@ -104,10 +110,8 @@ public class Player extends Character {
     }
 
     public int getAvailableBombs() {
-        return availableBombs;
+        return bombBagCapacity - placedBombs;
     }
-
-    public void useBomb() { availableBombs--; }
 
     public boolean isWinner() {
         return game.getGrid().get(getPosition()) instanceof Princess;

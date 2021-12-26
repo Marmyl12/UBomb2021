@@ -11,10 +11,8 @@ import fr.ubx.poo.ubomb.go.Bomb;
 import fr.ubx.poo.ubomb.go.GameObject;
 import fr.ubx.poo.ubomb.go.character.Monster;
 import fr.ubx.poo.ubomb.go.character.Player;
-import fr.ubx.poo.ubomb.go.decor.Box;
-import fr.ubx.poo.ubomb.go.decor.Decor;
-import fr.ubx.poo.ubomb.go.decor.DoorNextOpened;
-import fr.ubx.poo.ubomb.go.decor.Stone;
+import fr.ubx.poo.ubomb.go.decor.*;
+import fr.ubx.poo.ubomb.go.decor.bonus.Bonus;
 import fr.ubx.poo.ubomb.view.*;
 import javafx.animation.AnimationTimer;
 import javafx.application.Platform;
@@ -27,7 +25,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
-import java.awt.Rectangle;
+
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -47,7 +45,7 @@ public final class GameEngine {
     private StatusBar statusBar;
     private Pane layer;
     private Input input;
-    private int Moovecd=80;
+    private int moveCooldown =80;
 
 
     public GameEngine(final String windowTitle, Game game, final Stage stage) {
@@ -113,7 +111,37 @@ public final class GameEngine {
     }
 
     private void checkExplosions() {
-
+        game.getGrid().getEntities().forEach(gameObject -> {
+            if (gameObject instanceof Bomb) {
+                Bomb bomb = (Bomb) gameObject;
+                if (bomb.mustExplode()) {
+                    bomb.remove();
+                    Explosion explosion = new Explosion(bomb.getPosition());
+                    game.getGrid().set(bomb.getPosition(), explosion);
+                    sprites.add(new SpriteExplosion(layer, explosion));
+                    for (Direction direction : Direction.values()) {
+                        boolean boxDestroyed = false;
+                        for (int i = 0 ; i < player.getBombRange() && !boxDestroyed ; i++) {
+                            Position position = direction.nextPosition(bomb.getPosition(), i+1);
+                            GameObject gameObject1 = game.getGrid().get(position);
+                            if (gameObject1 instanceof Decor) {
+                                if (gameObject1 instanceof Bonus) {
+                                    gameObject1.remove();
+                                } else if (gameObject1 instanceof Box) {
+                                    gameObject1.remove();
+                                    boxDestroyed = true;
+                                } else {
+                                    break;
+                                }
+                            }
+                            Explosion explosion1 = new Explosion(position);
+                            game.getGrid().set(position, explosion1);
+                            sprites.add(new SpriteExplosion(layer, explosion1));
+                        }
+                    }
+                }
+            }
+        });
     }
 
     private void createNewBombs(long now) {
@@ -122,9 +150,14 @@ public final class GameEngine {
 
 
     private void checkCollision(long now) {
-        List<GameObject> gos = game.getGameObjects(player.getPosition());
-        for (GameObject go : gos) {
-            if (go instanceof Monster && !player.isInvincible()) {
+        if (!player.isInvincible()) {
+            List<GameObject> gos = game.getGameObjects(player.getPosition());
+            for (GameObject go : gos) {
+                if (go instanceof Monster) {
+                    player.takeDamage();
+                }
+            }
+            if (game.getGrid().get(player.getPosition()) instanceof Explosion) {
                 player.takeDamage();
             }
         }
@@ -143,7 +176,7 @@ public final class GameEngine {
             player.requestMove(Direction.RIGHT);
         } else if (input.isMoveUp()) {
             player.requestMove(Direction.UP);
-        } else if (input.isBomb()) {
+        } else if (input.isBomb() && player.useBomb()) {
             Bomb bomb = new Bomb(player.getPosition());
             game.getGrid().addEntity(bomb);
             sprites.add(new SpriteBomb(layer, bomb));
@@ -180,16 +213,15 @@ public final class GameEngine {
 
 
     private void update(long now) {
-        Moovecd--;
+        moveCooldown--;
         player.update(now);
-        if(Moovecd< game.monsterVelocity){
+        if (moveCooldown < game.monsterVelocity) {
             for (Monster monster : monsters) {
-
                 monster.requestMove(Direction.random());
                 monster.update(now);
-
             }
-              Moovecd=80;}
+            moveCooldown = 80;
+        }
 
         if (player.getLives() == 0) {
             gameLoop.stop();
@@ -211,8 +243,12 @@ public final class GameEngine {
 
     public void cleanupSprites() {
         sprites.forEach(sprite -> {
-            if (sprite.getGameObject().isDeleted()) {
-                game.getGrid().remove(sprite.getPosition());
+            GameObject gameObject = sprite.getGameObject();
+            if (gameObject.isDeleted()) {
+                if (gameObject instanceof Decor)
+                    game.getGrid().remove(sprite.getPosition());
+                else
+                    game.getGrid().getEntities().remove(gameObject);
                 cleanUpSprites.add(sprite);
             }
         });

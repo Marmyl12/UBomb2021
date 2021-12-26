@@ -32,4 +32,9 @@ public class Bomb extends GameObject {
         }
         return false;
     }
+
+    public boolean mustExplode() {
+        return (System.nanoTime() - timeSinceCreation) / 1_000_000_000 > 3;
+    }
+
 }

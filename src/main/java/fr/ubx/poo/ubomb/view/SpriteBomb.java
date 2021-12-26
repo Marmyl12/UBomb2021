@@ -16,7 +16,6 @@ public class SpriteBomb  extends Sprite {
     public void updateImage() {
         Bomb bomb = (Bomb) getGameObject();
         if (bomb.hasPhaseChanged()) {
-            System.out.println("Changed");
             setImage(ImageResource.getBomb(bomb.getPhase()));
             bomb.setModified(true);
         }
