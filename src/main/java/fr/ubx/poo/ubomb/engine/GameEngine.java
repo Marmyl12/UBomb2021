@@ -123,6 +123,7 @@ public final class GameEngine {
                         boolean boxDestroyed = false;
                         for (int i = 0 ; i < player.getBombRange() && !boxDestroyed ; i++) {
                             Position position = direction.nextPosition(bomb.getPosition(), i+1);
+                            if (!game.inside(position)) break;
                             GameObject gameObject1 = game.getGrid().get(position);
                             if (gameObject1 instanceof Decor) {
                                 if (gameObject1 instanceof Bonus) {
@@ -161,6 +162,14 @@ public final class GameEngine {
                 player.takeDamage();
             }
         }
+        game.getGrid().getEntities().forEach( entity -> {
+            if (entity instanceof Monster) {
+                Monster monster = (Monster) entity;
+                if (game.getGrid().get(monster.getPosition()) instanceof Explosion) {
+                    monster.remove();
+                }
+            }
+        });
     }
 
     private void processInput(long now) {

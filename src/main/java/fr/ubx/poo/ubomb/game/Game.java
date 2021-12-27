@@ -112,13 +112,8 @@ public class Game {
         return this.player;
     }
 
-
-    /*public Bomb getBomb() {
-        return this.bomb;
-    }*/
-
     public boolean inside(Position position) {
-        return true;
+        return position.getX() >= 0 && position.getY() >= 0 && position.getX() < getGrid().getWidth() && position.getY() < getGrid().getHeight();
     }
 
 }

@@ -10,7 +10,7 @@ public class DoorPrevOpened extends Decor implements Takeable {
     public DoorPrevOpened(Position position) { super(position); }
 
     @Override
-    public boolean isWalkable(Character character) { return true; }
+    public boolean isWalkable(Character character) { return character instanceof Player; }
 
     @Override
     public void takenBy(Player player) {

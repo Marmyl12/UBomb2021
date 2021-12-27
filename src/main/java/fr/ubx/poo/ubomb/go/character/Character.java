@@ -47,10 +47,8 @@ public abstract class Character extends GameObject implements Movable {
         if (obj != null) {
             return obj.isWalkable(this);
         }
-        int height = game.getGrid().getHeight();
-        int width = game.getGrid().getWidth();
         //Check collision with the grid
-        return nextPos.getX() >= 0 && nextPos.getY() >= 0 && nextPos.getX() < width && nextPos.getY() < height;
+        return game.inside(nextPos);
     }
 
     public void update(long now) {
