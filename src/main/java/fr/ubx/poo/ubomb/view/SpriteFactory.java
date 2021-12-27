@@ -49,6 +49,12 @@ public final class SpriteFactory {
         if (gameObject instanceof Monster)
             return new SpriteMonster(layer,(Monster)gameObject);
 
+        if (gameObject instanceof Bomb)
+            return new SpriteBomb(layer,(Bomb)gameObject);
+
+        if (gameObject instanceof Explosion)
+            return new SpriteExplosion(layer,gameObject);
+
 
         throw new RuntimeException("Unsupported sprite for decor " + gameObject);
     }
