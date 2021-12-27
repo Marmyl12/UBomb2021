@@ -8,6 +8,8 @@ import fr.ubx.poo.ubomb.go.Movable;
 import fr.ubx.poo.ubomb.go.character.Character;
 import fr.ubx.poo.ubomb.go.character.Player;
 
+import java.util.List;
+
 public class Box extends Decor implements Movable {
     public Box(Position position) {
         super(position);
@@ -24,7 +26,11 @@ public class Box extends Decor implements Movable {
     public boolean canMove(Direction direction) {
         Position nextPos = direction.nextPosition(getPosition());
         GameObject obj = game.getGrid().get(nextPos);
+        List <GameObject> ent = game.getGameObjects(nextPos);
         //Check collision with obstacle
+             for (GameObject e: ent) {
+                 if(e!=null)return false;
+             }
         if (obj != null) return false;
         int height = game.getGrid().getHeight();
         int width = game.getGrid().getWidth();
