@@ -19,7 +19,7 @@ public abstract class Character extends Entity implements Movable {
         super(game, position, level);
         this.direction = Direction.DOWN;
         this.lives = lives;
-        lastTimeDamaged = System.nanoTime();
+        lastTimeDamaged = 0;
     }
 
     public int getLives() {

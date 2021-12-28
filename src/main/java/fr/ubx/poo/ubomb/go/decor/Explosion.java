@@ -16,7 +16,6 @@ public class Explosion extends Entity {
     public Explosion(Game game, Position position, int level) {
         super(game, position, level);
         spawnTime = System.nanoTime();
-        System.out.println("hey");
     }
 
     @Override
@@ -26,7 +25,7 @@ public class Explosion extends Entity {
 
     @Override
     public void update(long now) {
-        game.getGameObjects(getPosition(), getLevel()).forEach(entity -> entity.explode());
+        game.getGameObjects(getPosition(), getLevel()).forEach(GameObject::explode);
         Decor decor = game.getGrid(getLevel()).get(getPosition());
         if (decor != null)
             decor.explode();
