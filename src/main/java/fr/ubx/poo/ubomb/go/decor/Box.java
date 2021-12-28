@@ -3,6 +3,7 @@ package fr.ubx.poo.ubomb.go.decor;
 import fr.ubx.poo.ubomb.game.Direction;
 import fr.ubx.poo.ubomb.game.Game;
 import fr.ubx.poo.ubomb.game.Position;
+import fr.ubx.poo.ubomb.go.Entity;
 import fr.ubx.poo.ubomb.go.GameObject;
 import fr.ubx.poo.ubomb.go.Movable;
 import fr.ubx.poo.ubomb.go.character.Character;
@@ -15,7 +16,9 @@ public class Box extends Decor implements Movable {
         super(position);
     }
 
-    public Box(Game game, Position position) { super(game, position); }
+    public Box(Game game, Position position) {
+        super(game, position);
+    }
 
     @Override
     public boolean isWalkable(Character character) {
@@ -26,16 +29,13 @@ public class Box extends Decor implements Movable {
     public boolean canMove(Direction direction) {
         Position nextPos = direction.nextPosition(getPosition());
         GameObject obj = game.getGrid().get(nextPos);
-        List <GameObject> ent = game.getGameObjects(nextPos);
+        List<Entity> ent = game.getGameObjects(nextPos);
         //Check collision with obstacle
-             for (GameObject e: ent) {
-                 if(e!=null)return false;
-             }
+        for (GameObject e : ent)
+            if (e != null) return false;
         if (obj != null) return false;
-        int height = game.getGrid().getHeight();
-        int width = game.getGrid().getWidth();
         //Check collision with the grid
-        return nextPos.getX() >= 0 && nextPos.getY() >= 0 && nextPos.getX() < width && nextPos.getY() < height;
+        return game.inside(nextPos);
     }
 
     public void doMove(Direction direction) {
@@ -43,6 +43,11 @@ public class Box extends Decor implements Movable {
         game.getGrid().remove(getPosition());
         setPosition(nextPos);
         game.getGrid().set(nextPos, this);
+    }
+
+    @Override
+    public void explode() {
+        remove();
     }
 
 }

@@ -8,9 +8,4 @@ public class SpriteExplosion extends Sprite {
     public SpriteExplosion(Pane layer, GameObject gameObject) {
         super(layer, ImageResource.EXPLOSION.getImage(), gameObject);
     }
-
-    @Override
-    public void updateImage() {
-        ((Explosion) getGameObject()).update();
-    }
 }

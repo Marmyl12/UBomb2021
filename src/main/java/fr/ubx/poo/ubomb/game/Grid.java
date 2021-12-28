@@ -1,5 +1,6 @@
 package fr.ubx.poo.ubomb.game;
 
+import fr.ubx.poo.ubomb.go.Entity;
 import fr.ubx.poo.ubomb.go.GameObject;
 import fr.ubx.poo.ubomb.go.decor.Decor;
 
@@ -11,7 +12,7 @@ public class Grid {
     private final int height;
 
     private final Map<Position, Decor> elements;
-    private final List<GameObject> entities;
+    private final List<Entity> entities;
 
     private Position startPos;
     private Position endPos;
@@ -41,11 +42,11 @@ public class Grid {
             elements.put(position, decor);
     }
 
-    public void addEntity(GameObject go) {
-        entities.add(go);
+    public void addEntity(Entity entity) {
+        entities.add(entity);
     }
 
-    public List<GameObject> getEntities() {
+    public List<Entity> getEntities() {
         return entities;
     }
 

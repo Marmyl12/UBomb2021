@@ -18,15 +18,13 @@ public class Player extends Character {
     private int bombBagCapacity;
     private int bombRange;
     private int keys;
-    private long lastTimeDamaged;
     private int placedBombs;
 
     public Player(Game game, Position position, int lives, int bombBagCapacity, int bombRange) {
-        super(game, position, lives);
+        super(game, position, game.getCurrentLevel(), lives);
         this.bombBagCapacity = bombBagCapacity;
         this.bombRange = bombRange;
         this.keys = 0;
-        lastTimeDamaged = System.nanoTime();
         placedBombs = 0;
     }
 
@@ -53,10 +51,6 @@ public class Player extends Character {
 
     }
 
-    @Override
-    public void explode() {
-    }
-
     //return true if the player can place a bomb and increase placed bombs
     public boolean useBomb() {
         if (placedBombs < bombBagCapacity) {
@@ -66,7 +60,10 @@ public class Player extends Character {
         return false;
     }
 
-    // Example of methods to define by the player
+    public void retrieveBomb() {
+        placedBombs--;
+    }
+
     public void takeDoor(int gotoLevel) {}
     public void takeHeart() {
         setLives(getLives()+1);
@@ -85,16 +82,6 @@ public class Player extends Character {
             return true;
         }
         return false;
-    }
-
-    public void takeDamage() {
-        loseLive();
-        lastTimeDamaged = System.nanoTime();
-    }
-
-    //Return true if the player has been hit since less than 1 second (1 billion nanoseconds)
-    public boolean isInvincible() {
-        return lastTimeDamaged + 1_000_000_000 > System.nanoTime();
     }
 
     public int getBombBagCapacity() {

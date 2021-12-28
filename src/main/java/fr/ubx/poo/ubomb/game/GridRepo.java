@@ -20,7 +20,7 @@ public abstract class GridRepo {
 
     public abstract Grid load(int level, String name);
 
-    GameObject processEntityCode(EntityCode entityCode, Position pos) {
+    GameObject processEntityCode(EntityCode entityCode, Position pos, int level) {
         switch (entityCode) {
             case Empty:
                 return null;
@@ -45,7 +45,7 @@ public abstract class GridRepo {
             case Princess:
                 return new Princess(pos);
             case Monster:
-                return new Monster(game, pos, 1);
+                return new Monster(game, pos, level, 1);
             case DoorNextClosed:
                 return new DoorNextClosed(pos);
             case DoorNextOpened:

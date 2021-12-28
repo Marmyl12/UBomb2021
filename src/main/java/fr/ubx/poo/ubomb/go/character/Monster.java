@@ -12,8 +12,25 @@ import fr.ubx.poo.ubomb.go.Movable;
 import fr.ubx.poo.ubomb.go.character.Player;
 import fr.ubx.poo.ubomb.go.decor.*;
 
-public class Monster extends Character  {
+public class Monster extends Character {
 
-    public Monster(Game game, Position position, int lives) { super(game, position, lives); }
+    private long timeSinceLastMove;
+    private final long baseVelocity = 10_000_000_000L;
+
+    public Monster(Game game, Position position, int level, int lives) {
+        super(game, position, level, lives);
+        timeSinceLastMove = System.nanoTime();
+    }
+
+    @Override
+    public void update(long now) {
+        if (getLives() <= 0) this.remove();
+        if (System.nanoTime() > timeSinceLastMove + baseVelocity / game.monsterVelocity) {
+            requestMove(Direction.random());
+            timeSinceLastMove = System.nanoTime();
+        }
+        super.update(now);
+
+    }
 
 }

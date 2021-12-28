@@ -52,8 +52,7 @@ public abstract class GameObject {
         deleted = true;
     }
 
-    public void explode() {
-    }
+    public void explode() { }
 
     public abstract boolean isWalkable(Character character);
 }

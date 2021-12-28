@@ -8,6 +8,7 @@ import fr.ubx.poo.ubomb.game.Direction;
 import fr.ubx.poo.ubomb.game.Game;
 import fr.ubx.poo.ubomb.game.Position;
 import fr.ubx.poo.ubomb.go.Bomb;
+import fr.ubx.poo.ubomb.go.Entity;
 import fr.ubx.poo.ubomb.go.GameObject;
 import fr.ubx.poo.ubomb.go.character.Monster;
 import fr.ubx.poo.ubomb.go.character.Player;
@@ -26,10 +27,7 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 
 public final class GameEngine {
@@ -38,14 +36,12 @@ public final class GameEngine {
     private final String windowTitle;
     private final Game game;
     private final Player player;
-    private final List<Monster> monsters = new LinkedList<>();
     private final List<Sprite> sprites = new LinkedList<>();
     private final Set<Sprite> cleanUpSprites = new HashSet<>();
     private final Stage stage;
     private StatusBar statusBar;
     private Pane layer;
     private Input input;
-    private int moveCooldown =80;
 
 
     public GameEngine(final String windowTitle, Game game, final Stage stage) {
@@ -83,8 +79,7 @@ public final class GameEngine {
             sprites.add(SpriteFactory.create(layer, decor));
             decor.setModified(true);
         }
-        for (GameObject entity : game.getGrid().getEntities()) {
-            if(entity instanceof Monster) monsters.add((Monster) entity);
+        for (Entity entity : game.getGrid().getEntities()) {
             sprites.add(SpriteFactory.create(layer, entity));
             entity.setModified(true);
         }
@@ -111,65 +106,64 @@ public final class GameEngine {
     }
 
     private void checkExplosions() {
-        game.getGrid().getEntities().forEach(gameObject -> {
-            if (gameObject instanceof Bomb) {
-                Bomb bomb = (Bomb) gameObject;
-                if (bomb.mustExplode()) {
-                    bomb.remove();
-                    Explosion explosion = new Explosion(bomb.getPosition());
-                    game.getGrid().set(bomb.getPosition(), explosion);
-                    sprites.add(new SpriteExplosion(layer, explosion));
-                    for (Direction direction : Direction.values()) {
-                        boolean boxDestroyed = false;
-                        for (int i = 0 ; i < player.getBombRange() && !boxDestroyed ; i++) {
-                            Position position = direction.nextPosition(bomb.getPosition(), i+1);
-                            if (!game.inside(position)) break;
-                            GameObject gameObject1 = game.getGrid().get(position);
-                            if (gameObject1 instanceof Decor) {
-                                if (gameObject1 instanceof Bonus) {
-                                    gameObject1.remove();
-                                } else if (gameObject1 instanceof Box) {
-                                    gameObject1.remove();
-                                    boxDestroyed = true;
-                                } else {
-                                    break;
-                                }
-                            }
-                            Explosion explosion1 = new Explosion(position);
-                            game.getGrid().set(position, explosion1);
-                            sprites.add(new SpriteExplosion(layer, explosion1));
-                        }
+        for (int i = 0 ; i < game.levels ; i++) {
+            List<Explosion> newExplosions = null;
+            for (Entity entity : game.getGrid(i).getEntities()) {
+                if (entity instanceof Bomb) {
+                    Bomb bomb = (Bomb) entity;
+                    if (bomb.mustExplode()) {
+                        newExplosions = explodeBomb(bomb, i);
+                        player.retrieveBomb();
                     }
                 }
             }
-        });
+            if (newExplosions != null) {
+                game.getGrid(i).getEntities().addAll(newExplosions);
+                if (i == game.getCurrentLevel())
+                    newExplosions.forEach(explosion -> sprites.add(new SpriteExplosion(layer, explosion)));
+            }
+        }
     }
 
-    private void createNewBombs(long now) {
-
+    //Explode a bomb, setup sprites and return a list of explosions to add to entities
+    private List<Explosion> explodeBomb(Bomb bomb, int level) {
+        bomb.remove();
+        List<Explosion> explosions = new LinkedList<>();
+        Explosion explosion = new Explosion(game, bomb.getPosition(), level);
+        explosions.add(explosion);
+        for (Direction direction : Direction.values()) {
+            boolean boxDestroyed = false;
+            for (int i = 0; i < player.getBombRange() && !boxDestroyed; i++) {
+                Position position = direction.nextPosition(bomb.getPosition(), i + 1);
+                if (!game.inside(position, level)) break;
+                Decor decor = game.getGrid(level).get(position);
+                if (decor instanceof Decor) {
+                    if (decor instanceof Bonus) {
+                        decor.explode();
+                    } else if (decor instanceof Box) {
+                        decor.explode();
+                        boxDestroyed = true;
+                    } else {
+                        break;
+                    }
+                }
+                Explosion explosion1 = new Explosion(game, position, level);
+                explosions.add(explosion1);
+            }
+        }
+        return explosions;
     }
 
 
     private void checkCollision(long now) {
         if (!player.isInvincible()) {
-            List<GameObject> gos = game.getGameObjects(player.getPosition());
+            List<Entity> gos = game.getGameObjects(player.getPosition());
             for (GameObject go : gos) {
-                if (go instanceof Monster) {
+                if (go instanceof Monster || go instanceof Explosion) {
                     player.takeDamage();
                 }
             }
-            if (game.getGrid().get(player.getPosition()) instanceof Explosion) {
-                player.takeDamage();
-            }
         }
-        game.getGrid().getEntities().forEach( entity -> {
-            if (entity instanceof Monster) {
-                Monster monster = (Monster) entity;
-                if (game.getGrid().get(monster.getPosition()) instanceof Explosion) {
-                    monster.remove();
-                }
-            }
-        });
     }
 
     private void processInput(long now) {
@@ -186,7 +180,7 @@ public final class GameEngine {
         } else if (input.isMoveUp()) {
             player.requestMove(Direction.UP);
         } else if (input.isBomb() && player.useBomb()) {
-            Bomb bomb = new Bomb(player.getPosition());
+            Bomb bomb = new Bomb(game, player.getPosition(), game.getCurrentLevel());
             game.getGrid().addEntity(bomb);
             sprites.add(new SpriteBomb(layer, bomb));
         } else if (input.isKey()) {
@@ -222,14 +216,16 @@ public final class GameEngine {
 
 
     private void update(long now) {
-        moveCooldown--;
         player.update(now);
-        if (moveCooldown < game.monsterVelocity) {
-            for (Monster monster : monsters) {
-                monster.requestMove(Direction.random());
-                monster.update(now);
+        for (int i = 0 ; i < game.levels ; i++) {
+            List<Entity> entitiesToRemove = new LinkedList<>();
+            for (Entity entity : game.getGrid(i).getEntities()) {
+                entity.update(now);
+                if (entity.isDeleted() && game.getCurrentLevel() != i) {
+                    entitiesToRemove.add(entity);
+                }
             }
-            moveCooldown = 80;
+            game.getGrid(i).getEntities().removeAll(entitiesToRemove);
         }
 
         if (player.getLives() == 0) {
@@ -280,7 +276,6 @@ public final class GameEngine {
     public void loadLevel() {
         cleanUpSprites.addAll(sprites);
         cleanupSprites();
-        monsters.clear();
         initialize();
         game.setChangeLevel(false);
     }

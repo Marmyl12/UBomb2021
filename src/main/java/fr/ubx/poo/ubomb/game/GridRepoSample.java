@@ -1,5 +1,6 @@
 package fr.ubx.poo.ubomb.game;
 
+import fr.ubx.poo.ubomb.go.Entity;
 import fr.ubx.poo.ubomb.go.GameObject;
 import fr.ubx.poo.ubomb.go.character.Monster;
 import fr.ubx.poo.ubomb.go.decor.Decor;
@@ -43,11 +44,11 @@ public class GridRepoSample extends GridRepo {
             for (int j = 0; j < height; j++) {
                 Position position = new Position(i, j);
                 EntityCode entityCode = entities[j][i];
-                GameObject go = processEntityCode(entityCode, position);
+                GameObject go = processEntityCode(entityCode, position, level);
                 if (go instanceof Decor) {
                     grid.set(position, (Decor) go);
                 } else if (go instanceof Monster) {
-                    grid.addEntity(go);
+                    grid.addEntity((Entity) go);
                 }
             }
         }

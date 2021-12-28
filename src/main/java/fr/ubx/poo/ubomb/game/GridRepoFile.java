@@ -1,5 +1,6 @@
 package fr.ubx.poo.ubomb.game;
 
+import fr.ubx.poo.ubomb.go.Entity;
 import fr.ubx.poo.ubomb.go.GameObject;
 import fr.ubx.poo.ubomb.go.character.Monster;
 import fr.ubx.poo.ubomb.go.decor.Decor;
@@ -24,7 +25,7 @@ public class GridRepoFile extends GridRepo {
     @Override
     public Grid load(int level, String name) {
         try {
-            File file = new File(worldPath, name + level + ".txt");
+            File file = new File(worldPath, name + (level + 1) + ".txt");
             FileReader reader = new FileReader(file);
             int width, height = 0, amount = 0;
             int c;
@@ -43,7 +44,7 @@ public class GridRepoFile extends GridRepo {
                     Position position = new Position(i, j);
                     c = reader.read();
                     EntityCode entityCode = EntityCode.fromCode((char) c);
-                    GameObject go = processEntityCode(entityCode, position);
+                    GameObject go = processEntityCode(entityCode, position, level);
                     if (go instanceof Decor) {
                         if (go instanceof DoorPrevOpened) {
                             grid.setStartPos(position);
@@ -52,7 +53,7 @@ public class GridRepoFile extends GridRepo {
                         }
                         grid.set(position, (Decor) go);
                     } else if (go instanceof Monster) {
-                        grid.addEntity(go);
+                        grid.addEntity((Entity) go);
                     }
                 }
                 reader.read();

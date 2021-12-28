@@ -42,8 +42,7 @@ public class Sprite {
         setImage(image, null);
     }
 
-    public void updateImage() {
-    }
+    public void updateImage() {}
 
     public Position getPosition() {
         return getGameObject().getPosition();

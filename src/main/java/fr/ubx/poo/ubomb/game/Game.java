@@ -6,6 +6,7 @@ package fr.ubx.poo.ubomb.game;
 
 
 import fr.ubx.poo.ubomb.go.Bomb;
+import fr.ubx.poo.ubomb.go.Entity;
 import fr.ubx.poo.ubomb.go.GameObject;
 import fr.ubx.poo.ubomb.go.character.Monster;
 import fr.ubx.poo.ubomb.go.character.Player;
@@ -47,7 +48,7 @@ public class Game {
             String prefix = prop.getProperty("prefix");
             GridRepo gridRepo = new GridRepoFile(this, worldPath);
             for (int i = 0 ; i < levels ; i++) {
-                this.grids.add(gridRepo.load(i+1, prefix));
+                this.grids.add(gridRepo.load(i, prefix));
             }
             currentLevel = 0;
 
@@ -89,7 +90,6 @@ public class Game {
     public void setCurrentVelocity(int currentLevel) {
         if(currentLevel==2) monsterVelocity=15;
         if(currentLevel==3) monsterVelocity=20;
-
     }
 
     public int getCurrentLevel() {
@@ -97,11 +97,22 @@ public class Game {
     }
 
     // Returns the player, monsters and bombs at a given position
-    public List<GameObject> getGameObjects(Position position) {
-        List<GameObject> gos = new LinkedList<>();
+    public List<Entity> getGameObjects(Position position) {
+        List<Entity> gos = new LinkedList<>();
         if (getPlayer().getPosition().equals(position))
             gos.add(player);
-        for (GameObject entity : getGrid().getEntities()) {
+        for (Entity entity : getGrid().getEntities()) {
+            if (entity.getPosition().equals(position))
+                gos.add(entity);
+        }
+        return gos;
+    }
+
+    public List<Entity> getGameObjects(Position position, int level) {
+        List<Entity> gos = new LinkedList<>();
+        if (getPlayer().getPosition().equals(position))
+            gos.add(player);
+        for (Entity entity : getGrid(level).getEntities()) {
             if (entity.getPosition().equals(position))
                 gos.add(entity);
         }
@@ -112,8 +123,12 @@ public class Game {
         return this.player;
     }
 
+    public boolean inside(Position position, int level) {
+        return position.getX() >= 0 && position.getY() >= 0 && position.getX() < getGrid(level).getWidth() && position.getY() < getGrid(level).getHeight();
+    }
+
     public boolean inside(Position position) {
-        return position.getX() >= 0 && position.getY() >= 0 && position.getX() < getGrid().getWidth() && position.getY() < getGrid().getHeight();
+        return inside(position, getCurrentLevel());
     }
 
 }
