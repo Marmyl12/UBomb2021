@@ -11,7 +11,7 @@ import java.util.List;
 public class Explosion extends Entity {
 
     private final long spawnTime;
-    private final int timeToLive = 1;
+    private final float timeToLive = 0.5f;
 
     public Explosion(Game game, Position position, int level) {
         super(game, position, level);

@@ -17,7 +17,6 @@ public class DoorPrevOpened extends Decor implements Takeable {
         Game game = player.game;
         game.setChangeLevel(true);
         player.setLevel(game.getCurrentLevel()-1);
-        game.setCurrentVelocity(game.getCurrentLevel()-1);
         game.setCurrentLevel(game.getCurrentLevel() - 1);
         game.getPlayer().setPosition(game.getGrid().getEndPos());
     }

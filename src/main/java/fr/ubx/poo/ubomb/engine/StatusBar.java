@@ -7,6 +7,7 @@ package fr.ubx.poo.ubomb.engine;
 import fr.ubx.poo.ubomb.game.Game;
 import fr.ubx.poo.ubomb.go.character.Player;
 import fr.ubx.poo.ubomb.view.ImageResource;
+import fr.ubx.poo.ubomb.view.Sprite;
 import javafx.scene.Group;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
@@ -17,6 +18,7 @@ import javafx.scene.text.Text;
 
 public class StatusBar {
     public static final int height = 55;
+    public static final int width = 12 * Sprite.size;
     private final Game game;
     private final DropShadow ds = new DropShadow();
     private final HBox hBox = new HBox();
@@ -54,8 +56,15 @@ public class StatusBar {
         hBox.getChildren().addAll(level, status);
         hBox.getStyleClass().add("statusBar");
         hBox.relocate(0, sceneHeight);
-        hBox.setPrefSize(sceneWidth, height);
-        hBox.resize(sceneWidth, height);
+
+        double scale = (double) (sceneWidth) / ((double) (12 * Sprite.size));
+        hBox.setScaleX(scale);
+        hBox.setScaleY(scale);
+        hBox.relocate(0d + (scale - 1d) * width / 2d, sceneHeight + (scale - 1d) * height / 2d);
+
+        hBox.setPrefSize(width, height);
+        hBox.resize(width, height);
+
         root.getChildren().add(hBox);
     }
 
@@ -69,6 +78,7 @@ public class StatusBar {
     private HBox statusGroup(Image kind, Text number) {
         HBox group = new HBox();
         ImageView img = new ImageView(kind);
+        img.setPreserveRatio(true);
         group.setSpacing(4);
         number.setEffect(ds);
         number.setCache(true);

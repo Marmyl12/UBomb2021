@@ -55,9 +55,11 @@ public class Sprite {
             }
             updateImage();
             imageView = new ImageView(this.image);
+            imageView.setPreserveRatio(true);
             imageView.setEffect(effect);
             imageView.setX(getPosition().getX() * size);
             imageView.setY(getPosition().getY() * size);
+            imageView.setFitHeight(size);
             layer.getChildren().add(imageView);
             gameObject.setModified(false);
         }

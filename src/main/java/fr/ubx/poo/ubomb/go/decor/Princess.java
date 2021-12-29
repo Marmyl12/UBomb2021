@@ -14,6 +14,7 @@ public class Princess extends Decor {
     }
     @Override
     public boolean isWalkable(Character character) {
-        return true;
+        if (character instanceof Player) return true;
+        return false;
     }
 }

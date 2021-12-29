@@ -61,7 +61,8 @@ public final class GameEngine {
         int width = game.getGrid().getWidth();
         int sceneWidth = width * Sprite.size;
         int sceneHeight = height * Sprite.size;
-        Scene scene = new Scene(root, sceneWidth, sceneHeight + StatusBar.height);
+        double scale = (float) (sceneWidth) / ((float) (12 * Sprite.size));
+        Scene scene = new Scene(root, sceneWidth, sceneHeight + StatusBar.height * scale);
         scene.getStylesheets().add(getClass().getResource("/css/application.css").toExternalForm());
 
         stage.setTitle(windowTitle);
@@ -133,14 +134,14 @@ public final class GameEngine {
         explosions.add(explosion);
         for (Direction direction : Direction.values()) {
             boolean boxDestroyed = false;
-            for (int i = 0; i < player.getBombRange() && !boxDestroyed; i++) {
+            for (int i = 0; i < player.getBombRange() ; i++) {
                 Position position = direction.nextPosition(bomb.getPosition(), i + 1);
                 if (!game.inside(position, level)) break;
                 Decor decor = game.getGrid(level).get(position);
                 if (decor instanceof Decor) {
                     if (decor instanceof Bonus) {
                         decor.explode();
-                    } else if (decor instanceof Box) {
+                    } else if (decor instanceof Box && !boxDestroyed) {
                         decor.explode();
                         boxDestroyed = true;
                     } else {

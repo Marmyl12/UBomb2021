@@ -26,7 +26,8 @@ public class SpriteMonster extends Sprite {
     public void updateImage() {
         Monster monster = (Monster) getGameObject();
         Image image = getImage(monster.getDirection());
-        setImage(image);
+        if (monster.isInvincible()) setImage(image, effect);
+        else setImage(image);
 
     }
 
