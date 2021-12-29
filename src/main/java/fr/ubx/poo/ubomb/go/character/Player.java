@@ -15,6 +15,10 @@ import fr.ubx.poo.ubomb.go.decor.bonus.Bonus;
 
 public class Player extends Character {
 
+    private static final int maxRange = 9;
+    private static final int maxCapacity = 9;
+    private static final int maxLives = 9;
+
     private int bombBagCapacity;
     private int bombRange;
     private int keys;
@@ -66,13 +70,13 @@ public class Player extends Character {
 
     public void takeDoor(int gotoLevel) {}
     public void takeHeart() {
-        setLives(getLives()+1);
+        if (getLives() < maxLives) setLives(getLives()+1);
     }
     public void takeKey() { keys++; }
-    public void takeBombRangeInc() { bombRange++; }
-    public void takeBombRangeDec() { bombRange--; }
-    public void BombNumberInc() { bombBagCapacity++; }
-    public void BombNumberDec() { bombBagCapacity--; }
+    public void takeBombRangeInc() { if (bombRange < maxRange) bombRange++; }
+    public void takeBombRangeDec() { if (bombRange > 0) bombRange--; }
+    public void BombNumberInc() { if (bombBagCapacity < maxCapacity) bombBagCapacity++; }
+    public void BombNumberDec() { if (bombBagCapacity > 0) bombBagCapacity--; }
 
     public boolean openDoor() {
         Position position = direction.nextPosition(getPosition());
