@@ -3,18 +3,14 @@ package fr.ubx.poo.ubomb.go.decor;
 import fr.ubx.poo.ubomb.game.Direction;
 import fr.ubx.poo.ubomb.game.Game;
 import fr.ubx.poo.ubomb.game.Position;
-import fr.ubx.poo.ubomb.go.Entity;
+import fr.ubx.poo.ubomb.go.entity.Entity;
 import fr.ubx.poo.ubomb.go.GameObject;
 import fr.ubx.poo.ubomb.go.Movable;
-import fr.ubx.poo.ubomb.go.character.Character;
-import fr.ubx.poo.ubomb.go.character.Player;
+import fr.ubx.poo.ubomb.go.entity.character.Character;
 
 import java.util.List;
 
 public class Box extends Decor implements Movable {
-    public Box(Position position) {
-        super(position);
-    }
 
     public Box(Game game, Position position) {
         super(game, position);
@@ -38,16 +34,16 @@ public class Box extends Decor implements Movable {
         return game.inside(nextPos);
     }
 
+    @Override
+    public void explode() {
+        remove();
+    }
+
     public void doMove(Direction direction) {
         Position nextPos = direction.nextPosition(getPosition());
         game.getGrid().remove(getPosition());
         setPosition(nextPos);
         game.getGrid().set(nextPos, this);
-    }
-
-    @Override
-    public void explode() {
-        remove();
     }
 
 }

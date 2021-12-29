@@ -5,7 +5,7 @@
 package fr.ubx.poo.ubomb.engine;
 
 import fr.ubx.poo.ubomb.game.Game;
-import fr.ubx.poo.ubomb.go.character.Player;
+import fr.ubx.poo.ubomb.go.entity.character.Player;
 import fr.ubx.poo.ubomb.view.ImageResource;
 import fr.ubx.poo.ubomb.view.Sprite;
 import javafx.scene.Group;
@@ -55,9 +55,11 @@ public class StatusBar {
 
         hBox.getChildren().addAll(level, status);
         hBox.getStyleClass().add("statusBar");
-        hBox.relocate(0, sceneHeight);
 
+        // Calculate ratio between ideal width and scene width
         double scale = (double) (sceneWidth) / ((double) (12 * Sprite.size));
+
+        // Rescaling and relocating inline with the new scale
         hBox.setScaleX(scale);
         hBox.setScaleY(scale);
         hBox.relocate(0d + (scale - 1d) * width / 2d, sceneHeight + (scale - 1d) * height / 2d);

@@ -7,13 +7,13 @@ package fr.ubx.poo.ubomb.engine;
 import fr.ubx.poo.ubomb.game.Direction;
 import fr.ubx.poo.ubomb.game.Game;
 import fr.ubx.poo.ubomb.game.Position;
-import fr.ubx.poo.ubomb.go.Bomb;
-import fr.ubx.poo.ubomb.go.Entity;
+import fr.ubx.poo.ubomb.go.entity.Bomb;
+import fr.ubx.poo.ubomb.go.entity.Entity;
 import fr.ubx.poo.ubomb.go.GameObject;
-import fr.ubx.poo.ubomb.go.character.Monster;
-import fr.ubx.poo.ubomb.go.character.Player;
+import fr.ubx.poo.ubomb.go.entity.Explosion;
+import fr.ubx.poo.ubomb.go.entity.character.Monster;
+import fr.ubx.poo.ubomb.go.entity.character.Player;
 import fr.ubx.poo.ubomb.go.decor.*;
-import fr.ubx.poo.ubomb.go.decor.bonus.Bonus;
 import fr.ubx.poo.ubomb.view.*;
 import javafx.animation.AnimationTimer;
 import javafx.application.Platform;
@@ -106,6 +106,7 @@ public final class GameEngine {
         };
     }
 
+    // Remove bombes and create explosions and their sprites
     private void checkExplosions() {
         for (int i = 0 ; i < game.levels ; i++) {
             List<Explosion> newExplosions = null;
@@ -121,7 +122,7 @@ public final class GameEngine {
             if (newExplosions != null) {
                 game.getGrid(i).getEntities().addAll(newExplosions);
                 if (i == game.getCurrentLevel())
-                    newExplosions.forEach(explosion -> sprites.add(new SpriteExplosion(layer, explosion)));
+                    newExplosions.forEach(explosion -> sprites.add(SpriteFactory.create(layer, explosion)));
             }
         }
     }
@@ -139,28 +140,25 @@ public final class GameEngine {
                 if (!game.inside(position, level)) break;
                 Decor decor = game.getGrid(level).get(position);
                 if (decor != null) {
-                    if (decor instanceof Bonus) {
-                        decor.explode();
-                    } else if (decor instanceof Box && !boxDestroyed) {
-                        decor.explode();
+                     if (decor instanceof Box && !boxDestroyed) {
                         boxDestroyed = true;
-                    } else {
+                     } else {
                         break;
                     }
                 }
-                Explosion explosion1 = new Explosion(game, position, level);
-                explosions.add(explosion1);
+                Explosion sideExplosion = new Explosion(game, position, level);
+                explosions.add(sideExplosion);
             }
         }
         return explosions;
     }
 
-
+    // Check if the player collides with monsters
     private void checkCollision(long now) {
         if (!player.isInvincible()) {
             List<Entity> gos = game.getGameObjects(player.getPosition());
             for (GameObject go : gos) {
-                if (go instanceof Monster || go instanceof Explosion) {
+                if (go instanceof Monster) {
                     player.takeDamage();
                 }
             }
@@ -185,13 +183,7 @@ public final class GameEngine {
             game.getGrid().addEntity(bomb);
             sprites.add(new SpriteBomb(layer, bomb));
         } else if (input.isKey()) {
-            if (player.openDoor()) {
-                Position position = player.getDirection().nextPosition(player.getPosition());
-                game.getGrid().get(position).remove();
-                cleanupSprites();
-                game.getGrid().set(position, new DoorNextOpened(position));
-                sprites.add(SpriteFactory.create(layer, game.getGrid().get(position)));
-            }
+            openDoor();
         }
         input.clear();
     }
@@ -223,6 +215,7 @@ public final class GameEngine {
             for (Entity entity : game.getGrid(i).getEntities()) {
                 entity.update(now);
                 if (entity.isDeleted() && game.getCurrentLevel() != i) {
+                    // Remove destroyed entities from unloaded levels
                     entitiesToRemove.add(entity);
                 }
             }
@@ -272,6 +265,16 @@ public final class GameEngine {
 
     public void start() {
         gameLoop.start();
+    }
+
+    public void openDoor() {
+        if (player.openDoor()) {
+            Position position = player.getDirection().nextPosition(player.getPosition());
+            game.getGrid().get(position).remove();
+            cleanupSprites();
+            game.getGrid().set(position, new DoorNextOpened(position));
+            sprites.add(SpriteFactory.create(layer, game.getGrid().get(position)));
+        }
     }
 
     public void loadLevel() {

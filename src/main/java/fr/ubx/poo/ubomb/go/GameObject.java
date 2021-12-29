@@ -6,8 +6,7 @@ package fr.ubx.poo.ubomb.go;
 
 import fr.ubx.poo.ubomb.game.Game;
 import fr.ubx.poo.ubomb.game.Position;
-import fr.ubx.poo.ubomb.go.character.Character;
-import fr.ubx.poo.ubomb.go.character.Player;
+import fr.ubx.poo.ubomb.go.entity.character.Character;
 
 /**
  * A GameObject is an entity in the grid, it may know its position

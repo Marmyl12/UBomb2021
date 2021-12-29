@@ -4,13 +4,12 @@
 
 package fr.ubx.poo.ubomb.view;
 
-import fr.ubx.poo.ubomb.go.Bomb;
+import fr.ubx.poo.ubomb.go.entity.Bomb;
 import fr.ubx.poo.ubomb.go.GameObject;
-import fr.ubx.poo.ubomb.go.character.Monster;
+import fr.ubx.poo.ubomb.go.entity.Explosion;
+import fr.ubx.poo.ubomb.go.entity.character.Monster;
 import fr.ubx.poo.ubomb.go.decor.*;
-import fr.ubx.poo.ubomb.go.decor.Box;
 import fr.ubx.poo.ubomb.go.decor.bonus.*;
-import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
 
 import static fr.ubx.poo.ubomb.view.ImageResource.*;
@@ -45,15 +44,12 @@ public final class SpriteFactory {
             return new Sprite(layer, DOOR_OPENED.getImage(), gameObject);
         if (gameObject instanceof DoorPrevOpened)
             return new Sprite(layer, DOOR_OPENED.getImage(), gameObject);
-
         if (gameObject instanceof Monster)
             return new SpriteMonster(layer,(Monster)gameObject);
-
         if (gameObject instanceof Bomb)
             return new SpriteBomb(layer,(Bomb)gameObject);
-
         if (gameObject instanceof Explosion)
-            return new SpriteExplosion(layer,gameObject);
+            return new Sprite(layer, EXPLOSION.getImage(), gameObject);
 
 
         throw new RuntimeException("Unsupported sprite for decor " + gameObject);

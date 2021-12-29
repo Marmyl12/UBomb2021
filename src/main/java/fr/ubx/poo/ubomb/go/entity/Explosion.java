@@ -1,12 +1,11 @@
-package fr.ubx.poo.ubomb.go.decor;
+package fr.ubx.poo.ubomb.go.entity;
 
 import fr.ubx.poo.ubomb.game.Game;
 import fr.ubx.poo.ubomb.game.Position;
-import fr.ubx.poo.ubomb.go.Entity;
+import fr.ubx.poo.ubomb.go.decor.Decor;
+import fr.ubx.poo.ubomb.go.entity.Entity;
 import fr.ubx.poo.ubomb.go.GameObject;
-import fr.ubx.poo.ubomb.go.character.Character;
-
-import java.util.List;
+import fr.ubx.poo.ubomb.go.entity.character.Character;
 
 public class Explosion extends Entity {
 

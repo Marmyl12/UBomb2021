@@ -5,7 +5,7 @@
 package fr.ubx.poo.ubomb.view;
 
 import fr.ubx.poo.ubomb.game.Direction;
-import fr.ubx.poo.ubomb.go.character.Player;
+import fr.ubx.poo.ubomb.go.entity.character.Player;
 import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;

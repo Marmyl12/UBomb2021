@@ -1,12 +1,11 @@
-package fr.ubx.poo.ubomb.go.character;
+package fr.ubx.poo.ubomb.go.entity.character;
 
 import fr.ubx.poo.ubomb.game.Direction;
 import fr.ubx.poo.ubomb.game.Game;
 import fr.ubx.poo.ubomb.game.Position;
-import fr.ubx.poo.ubomb.go.Entity;
+import fr.ubx.poo.ubomb.go.entity.Entity;
 import fr.ubx.poo.ubomb.go.GameObject;
 import fr.ubx.poo.ubomb.go.Movable;
-import fr.ubx.poo.ubomb.go.decor.Decor;
 
 import java.util.List;
 
@@ -16,12 +15,14 @@ public abstract class Character extends Entity implements Movable {
     private boolean moveRequested = false;
     private int lives;
     private long lastTimeDamaged;
+    private final long invisibilityTime;
 
-    public Character(Game game, Position position, int level, int lives) {
+    public Character(Game game, Position position, int level, int lives, long invisibilityTime) {
         super(game, position, level);
         this.direction = Direction.DOWN;
         this.lives = lives;
         lastTimeDamaged = 0;
+        this.invisibilityTime = invisibilityTime;
     }
 
     public int getLives() {
@@ -82,9 +83,9 @@ public abstract class Character extends Entity implements Movable {
         lastTimeDamaged = System.nanoTime();
     }
 
-    //Return true if the character has been hit since less than 1 second (1 billion nanoseconds)
+    // Return true if the character is still invincible
     public boolean isInvincible() {
-        return lastTimeDamaged + 1_000_000_000 > System.nanoTime();
+        return lastTimeDamaged + invisibilityTime * 1_000_000L > System.nanoTime();
     }
 
     @Override

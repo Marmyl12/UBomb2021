@@ -1,21 +1,20 @@
 package fr.ubx.poo.ubomb.game;
 
-import fr.ubx.poo.ubomb.go.Entity;
+import fr.ubx.poo.ubomb.go.entity.Entity;
 import fr.ubx.poo.ubomb.go.GameObject;
-import fr.ubx.poo.ubomb.go.character.Monster;
+import fr.ubx.poo.ubomb.go.entity.character.Monster;
 import fr.ubx.poo.ubomb.go.decor.Decor;
 import fr.ubx.poo.ubomb.go.decor.DoorNextClosed;
 import fr.ubx.poo.ubomb.go.decor.DoorNextOpened;
 import fr.ubx.poo.ubomb.go.decor.DoorPrevOpened;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
 public class GridRepoFile extends GridRepo {
 
-    private String worldPath;
+    private final String worldPath;
 
     public GridRepoFile(Game game, String worldPath) {
         super(game);
@@ -29,6 +28,7 @@ public class GridRepoFile extends GridRepo {
             FileReader reader = new FileReader(file);
             int width, height = 0, amount = 0;
             int c;
+            // Compute grid height and width
             while ((c = reader.read()) != -1) {
                 if (c == '\n') {
                     height++;
@@ -39,6 +39,7 @@ public class GridRepoFile extends GridRepo {
             width = amount / height;
             Grid grid = new Grid(width, height);
             reader = new FileReader(file);
+            // Load
             for (int j = 0; j < height; j++) {
                 for (int i = 0; i < width; i++) {
                     Position position = new Position(i, j);
@@ -60,8 +61,7 @@ public class GridRepoFile extends GridRepo {
             }
             return grid;
         } catch (IOException e) {
-            System.err.println(e);
-            throw new GridRepoException("Error while loading grid");
+            throw new GridException("Error while loading grid");
         }
     }
 }

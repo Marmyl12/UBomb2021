@@ -1,9 +1,6 @@
 package fr.ubx.poo.ubomb.view;
 
-import fr.ubx.poo.ubomb.go.Bomb;
-import fr.ubx.poo.ubomb.go.character.Player;
-import javafx.scene.effect.ColorAdjust;
-import javafx.scene.image.Image;
+import fr.ubx.poo.ubomb.go.entity.Bomb;
 import javafx.scene.layout.Pane;
 
 public class SpriteBomb  extends Sprite {
@@ -13,6 +10,7 @@ public class SpriteBomb  extends Sprite {
         updateImage();
     }
 
+    @Override
     public void updateImage() {
         Bomb bomb = (Bomb) getGameObject();
         if (bomb.hasPhaseChanged()) {

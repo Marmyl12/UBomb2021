@@ -1,16 +1,12 @@
 package fr.ubx.poo.ubomb.go.decor.bonus;
 
 import fr.ubx.poo.ubomb.game.Position;
-import fr.ubx.poo.ubomb.go.Takeable;
-import fr.ubx.poo.ubomb.go.character.Player;
-import fr.ubx.poo.ubomb.go.decor.Decor;
+import fr.ubx.poo.ubomb.go.entity.character.Player;
 
 public class Heart extends Bonus {
     public Heart(Position position) {
         super(position);
     }
 
-    public void takenBy(Player player) {
-        player.takeHeart();
-    }
+    public void takenBy(Player player) { player.takeHeart(); }
 }

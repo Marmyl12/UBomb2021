@@ -1,8 +1,8 @@
 package fr.ubx.poo.ubomb.game;
 
-import fr.ubx.poo.ubomb.go.Entity;
+import fr.ubx.poo.ubomb.go.entity.Entity;
 import fr.ubx.poo.ubomb.go.GameObject;
-import fr.ubx.poo.ubomb.go.character.Monster;
+import fr.ubx.poo.ubomb.go.entity.character.Monster;
 import fr.ubx.poo.ubomb.go.decor.Decor;
 
 import java.lang.reflect.Field;
@@ -60,9 +60,7 @@ public class GridRepoSample extends GridRepo {
         try {
             Field field = this.getClass().getDeclaredField(name);
             return (EntityCode[][]) field.get(this);
-        } catch (IllegalAccessException e) {
-            return null;
-        } catch (NoSuchFieldException e) {
+        } catch (IllegalAccessException | NoSuchFieldException e) {
             return null;
         }
     }

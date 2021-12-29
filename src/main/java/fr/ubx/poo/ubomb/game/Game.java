@@ -5,11 +5,8 @@
 package fr.ubx.poo.ubomb.game;
 
 
-import fr.ubx.poo.ubomb.go.Bomb;
-import fr.ubx.poo.ubomb.go.Entity;
-import fr.ubx.poo.ubomb.go.GameObject;
-import fr.ubx.poo.ubomb.go.character.Monster;
-import fr.ubx.poo.ubomb.go.character.Player;
+import fr.ubx.poo.ubomb.go.entity.Entity;
+import fr.ubx.poo.ubomb.go.entity.character.Player;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -91,18 +88,12 @@ public class Game {
         return currentLevel;
     }
 
-    // Returns the player, monsters and bombs at a given position
+    // Returns all the entities at a given position on the current level
     public List<Entity> getGameObjects(Position position) {
-        List<Entity> gos = new LinkedList<>();
-        if (getPlayer().getPosition().equals(position))
-            gos.add(player);
-        for (Entity entity : getGrid().getEntities()) {
-            if (entity.getPosition().equals(position))
-                gos.add(entity);
-        }
-        return gos;
+        return getGameObjects(position, getCurrentLevel());
     }
 
+    // Returns all the entities at a given position and a given level
     public List<Entity> getGameObjects(Position position, int level) {
         List<Entity> gos = new LinkedList<>();
         if (getPlayer().getPosition().equals(position))
@@ -118,10 +109,12 @@ public class Game {
         return this.player;
     }
 
+    // Returns true if the given position is inside the given level
     public boolean inside(Position position, int level) {
         return position.getX() >= 0 && position.getY() >= 0 && position.getX() < getGrid(level).getWidth() && position.getY() < getGrid(level).getHeight();
     }
 
+    // Returns true if the given position is inside the current level
     public boolean inside(Position position) {
         return inside(position, getCurrentLevel());
     }

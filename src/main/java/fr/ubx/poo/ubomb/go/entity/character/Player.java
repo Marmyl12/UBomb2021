@@ -2,12 +2,11 @@
  * Copyright (c) 2020. Laurent Réveillère
  */
 
-package fr.ubx.poo.ubomb.go.character;
+package fr.ubx.poo.ubomb.go.entity.character;
 
 import fr.ubx.poo.ubomb.game.Direction;
 import fr.ubx.poo.ubomb.game.Game;
 import fr.ubx.poo.ubomb.game.Position;
-import fr.ubx.poo.ubomb.go.GameObject;
 import fr.ubx.poo.ubomb.go.Takeable;
 import fr.ubx.poo.ubomb.go.decor.*;
 import fr.ubx.poo.ubomb.go.decor.bonus.Bonus;
@@ -25,7 +24,7 @@ public class Player extends Character {
     private int placedBombs;
 
     public Player(Game game, Position position, int lives, int bombBagCapacity, int bombRange) {
-        super(game, position, game.getCurrentLevel(), lives);
+        super(game, position, game.getCurrentLevel(), lives, game.playerInvisibilityTime);
         this.bombBagCapacity = bombBagCapacity;
         this.bombRange = bombRange;
         this.keys = 0;
@@ -68,7 +67,6 @@ public class Player extends Character {
         placedBombs--;
     }
 
-    public void takeDoor(int gotoLevel) {}
     public void takeHeart() {
         if (getLives() < maxLives) setLives(getLives()+1);
     }
@@ -78,6 +76,7 @@ public class Player extends Character {
     public void BombNumberInc() { if (bombBagCapacity < maxCapacity) bombBagCapacity++; }
     public void BombNumberDec() { if (bombBagCapacity > 1) bombBagCapacity--; }
 
+    // return true and use a key if the decor in front of the player is a door and it can be opened
     public boolean openDoor() {
         Position position = direction.nextPosition(getPosition());
         Decor go = game.getGrid().get(position);
@@ -86,10 +85,6 @@ public class Player extends Character {
             return true;
         }
         return false;
-    }
-
-    public int getBombBagCapacity() {
-        return bombBagCapacity;
     }
 
     public int getBombRange() {
