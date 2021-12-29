@@ -3,6 +3,7 @@ package fr.ubx.poo.ubomb.go;
 import fr.ubx.poo.ubomb.game.Game;
 import fr.ubx.poo.ubomb.game.Position;
 import fr.ubx.poo.ubomb.go.character.Character;
+import fr.ubx.poo.ubomb.go.character.Player;
 
 public class Bomb extends Entity {
     private final long timeSinceCreation;
@@ -17,7 +18,7 @@ public class Bomb extends Entity {
     }
 
     @Override
-    public boolean isWalkable(Character character) { return true; }
+    public boolean isWalkable(Character character) { return character instanceof Player; }
 
     @Override
     public void update(long now) {
@@ -32,8 +33,7 @@ public class Bomb extends Entity {
     //return the "phase" of the bomb (0 - 3 : string burning, 4 exploding)
     public int getPhase() {
         int phase = (int) ((System.nanoTime() - timeSinceCreation) / 1_000_000_000);
-        if (phase > 3) return 3;
-        return phase;
+        return Math.min(phase, 3);
     }
 
     public boolean hasPhaseChanged() {

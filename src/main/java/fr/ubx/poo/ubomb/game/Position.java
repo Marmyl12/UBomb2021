@@ -48,4 +48,9 @@ public class Position {
     public String toString() {
         return "(" + x + "," + y + ")";
     }
+
+    // return the Manhattan distance between a and b
+    public static int manhattan(Position a, Position b) {
+        return Math.abs(a.x - b.x) + Math.abs(a.y + b.y);
+    }
 }
