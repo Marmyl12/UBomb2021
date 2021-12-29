@@ -27,6 +27,7 @@ public class SpritePlayer extends Sprite {
         Image image = getImage(player.getDirection());
         if (player.isInvincible()) setImage(image, effect);
         else setImage(image);
+        getGameObject().setModified(true);
     }
 
     public Image getImage(Direction direction) {

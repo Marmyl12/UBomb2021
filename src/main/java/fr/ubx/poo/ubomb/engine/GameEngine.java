@@ -7,6 +7,7 @@ package fr.ubx.poo.ubomb.engine;
 import fr.ubx.poo.ubomb.game.Direction;
 import fr.ubx.poo.ubomb.game.Game;
 import fr.ubx.poo.ubomb.game.Position;
+import fr.ubx.poo.ubomb.go.decor.bonus.Bonus;
 import fr.ubx.poo.ubomb.go.entity.Bomb;
 import fr.ubx.poo.ubomb.go.entity.Entity;
 import fr.ubx.poo.ubomb.go.GameObject;
@@ -139,7 +140,7 @@ public final class GameEngine {
                 Position position = direction.nextPosition(bomb.getPosition(), i + 1);
                 if (!game.inside(position, level)) break;
                 Decor decor = game.getGrid(level).get(position);
-                if (decor != null) {
+                if (decor != null && !(decor instanceof Bonus)) {
                      if (decor instanceof Box && !boxDestroyed) {
                         boxDestroyed = true;
                      } else {

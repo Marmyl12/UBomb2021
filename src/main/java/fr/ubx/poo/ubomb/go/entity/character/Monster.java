@@ -26,7 +26,7 @@ public class Monster extends Character {
         if (System.nanoTime() > timeSinceLastMove + baseVelocity / (game.monsterVelocity + getLevel() * 5L)) {
             Direction nextMove = null;
             // Compute the next move using the A* algorithm only if the player is on the last level and is not invisible  (to give him time to breathe)
-            if (getLevel() == game.getCurrentLevel() && getLevel() == game.levels && !game.getPlayer().isInvincible())
+            if (getLevel() == game.getCurrentLevel() && getLevel() == game.levels - 1 && !game.getPlayer().isInvincible())
                 nextMove = PathFinder.nextBestMove(getPosition(), game.getPlayer().getPosition(), this);
             if (nextMove == null)
                 requestMove(Direction.random());

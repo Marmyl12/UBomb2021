@@ -45,7 +45,7 @@ public abstract class GridRepo {
             case Princess:
                 return new Princess(pos);
             case Monster:
-                return new Monster(game, pos, level, 1 + (level + 1) / 2);
+                return new Monster(game, pos, level, 1 + level / 2);
             case DoorNextClosed:
                 return new DoorNextClosed(pos);
             case DoorNextOpened:
