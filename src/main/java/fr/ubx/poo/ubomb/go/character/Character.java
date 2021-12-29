@@ -8,6 +8,8 @@ import fr.ubx.poo.ubomb.go.GameObject;
 import fr.ubx.poo.ubomb.go.Movable;
 import fr.ubx.poo.ubomb.go.decor.Decor;
 
+import java.util.List;
+
 public abstract class Character extends Entity implements Movable {
 
     public Direction direction;
@@ -51,6 +53,11 @@ public abstract class Character extends Entity implements Movable {
         if (obj != null) {
             return obj.isWalkable(this);
         }
+        //Check collision with entities
+        List<Entity> entities = game.getGameObjects(direction.nextPosition(getPosition()), getLevel());
+        for (Entity entity : entities)
+            if (!entity.isWalkable(this))
+                return false;
         //Check collision with the grid
         return game.inside(nextPos, getLevel());
     }

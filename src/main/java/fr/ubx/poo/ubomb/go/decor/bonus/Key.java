@@ -17,4 +17,7 @@ public class Key extends Bonus {
     public void takenBy(Player player) {
         player.takeKey();
     }
+
+    @Override
+    public void explode() {}
 }

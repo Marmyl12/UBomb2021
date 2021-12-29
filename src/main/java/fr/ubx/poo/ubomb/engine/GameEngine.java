@@ -134,11 +134,11 @@ public final class GameEngine {
         explosions.add(explosion);
         for (Direction direction : Direction.values()) {
             boolean boxDestroyed = false;
-            for (int i = 0; i < player.getBombRange() ; i++) {
+            for (int i = 0; i < bomb.range ; i++) {
                 Position position = direction.nextPosition(bomb.getPosition(), i + 1);
                 if (!game.inside(position, level)) break;
                 Decor decor = game.getGrid(level).get(position);
-                if (decor instanceof Decor) {
+                if (decor != null) {
                     if (decor instanceof Bonus) {
                         decor.explode();
                     } else if (decor instanceof Box && !boxDestroyed) {

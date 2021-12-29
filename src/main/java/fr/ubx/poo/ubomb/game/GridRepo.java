@@ -45,7 +45,7 @@ public abstract class GridRepo {
             case Princess:
                 return new Princess(pos);
             case Monster:
-                return new Monster(game, pos, level, 1 + level);
+                return new Monster(game, pos, level, 1 + (level + 1) / 2);
             case DoorNextClosed:
                 return new DoorNextClosed(pos);
             case DoorNextOpened:
@@ -53,8 +53,7 @@ public abstract class GridRepo {
             case DoorPrevOpened:
                 return new DoorPrevOpened(pos);
             default:
-                return null;
-                // throw new RuntimeException("EntityCode " + entityCode.name() + " not processed");
+                throw new RuntimeException("EntityCode " + entityCode.name() + " not processed");
         }
     }
 }

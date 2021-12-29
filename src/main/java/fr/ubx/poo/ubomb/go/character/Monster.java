@@ -25,21 +25,11 @@ public class Monster extends Character {
     }
 
     @Override
-    public boolean canMove(Direction direction) {
-        List<Entity> entities = game.getGameObjects(direction.nextPosition(getPosition()), getLevel());
-        for (Entity entity : entities) {
-            if (entity instanceof Bomb || entity instanceof Monster)
-                return false;
-        }
-        return super.canMove(direction);
-    }
-
-    @Override
     public void update(long now) {
         if (getLives() <= 0) this.remove();
         if (System.nanoTime() > timeSinceLastMove + baseVelocity / (game.monsterVelocity + getLevel() * 5)) {
             Direction nextMove = null;
-            if (getLevel() == game.getCurrentLevel())
+            if (getLevel() == game.getCurrentLevel() && getLevel() == game.levels)
                 nextMove = pathFinder.nextBestMove(getPosition(), game.getPlayer().getPosition(), this);
             if (nextMove == null)
                 requestMove(Direction.random());

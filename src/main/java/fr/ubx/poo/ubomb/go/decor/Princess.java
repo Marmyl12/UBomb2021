@@ -9,12 +9,14 @@ import fr.ubx.poo.ubomb.go.character.Character;
 import fr.ubx.poo.ubomb.go.character.Player;
 
 public class Princess extends Decor {
+
     public Princess(Position position) {
         super(position);
     }
+
     @Override
     public boolean isWalkable(Character character) {
-        if (character instanceof Player) return true;
-        return false;
+        return character instanceof Player;
     }
+
 }

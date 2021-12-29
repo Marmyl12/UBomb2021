@@ -9,12 +9,14 @@ public class Bomb extends Entity {
     private final long timeSinceCreation;
     private int currentPhase;
     private boolean mustExplode;
+    public final int range;
 
     public Bomb(Game game, Position position, int level) {
         super(game, position, level);
         this.timeSinceCreation = System.nanoTime();
         this.currentPhase = getPhase();
         mustExplode = false;
+        range = game.getPlayer().getBombRange();
     }
 
     @Override

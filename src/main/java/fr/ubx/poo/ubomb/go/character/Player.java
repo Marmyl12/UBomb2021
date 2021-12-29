@@ -76,7 +76,7 @@ public class Player extends Character {
     public void takeBombRangeInc() { if (bombRange < maxRange) bombRange++; }
     public void takeBombRangeDec() { if (bombRange > 0) bombRange--; }
     public void BombNumberInc() { if (bombBagCapacity < maxCapacity) bombBagCapacity++; }
-    public void BombNumberDec() { if (bombBagCapacity > 0) bombBagCapacity--; }
+    public void BombNumberDec() { if (bombBagCapacity > 1) bombBagCapacity--; }
 
     public boolean openDoor() {
         Position position = direction.nextPosition(getPosition());
