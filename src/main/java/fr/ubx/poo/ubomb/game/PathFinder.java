@@ -4,6 +4,7 @@ package fr.ubx.poo.ubomb.game;
 import fr.ubx.poo.ubomb.go.Entity;
 import fr.ubx.poo.ubomb.go.character.Monster;
 import fr.ubx.poo.ubomb.go.decor.Decor;
+import fr.ubx.poo.ubomb.go.decor.Explosion;
 
 import java.util.*;
 
@@ -79,7 +80,7 @@ public class PathFinder {
                 walkable = decor.isWalkable(monster);
             List<Entity> entities = monster.game.getGameObjects(neighbor, monster.getLevel());
             for (Entity entity : entities) {
-                if (!entity.isWalkable(monster)) {
+                if (!entity.isWalkable(monster) || entity instanceof Explosion) {
                     walkable = false;
                     break;
                 }
@@ -107,6 +108,7 @@ public class PathFinder {
     // return the position before the one with no parent
     private Position getNextPosition (PositionNode positionNode) {
         PositionNode positionNodeParent = positionNode.parent;
+        if (positionNodeParent == null) return null;
         while (positionNodeParent.parent != null) {
             positionNode = positionNode.parent;
             positionNodeParent = positionNodeParent.parent;
