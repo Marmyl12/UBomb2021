@@ -70,21 +70,9 @@ public final class GameEngine {
         Scene scene = new Scene(root, sceneWidth, sceneHeight + StatusBar.height * scale);
         Rectangle bg = new Rectangle(scene.getWidth(), sceneHeight);
         scene.getStylesheets().add(getClass().getResource("/css/application.css").toExternalForm());
-        if (game.getCurrentLevel()==0) {
-            Image img = ImageResource.BACKGROUND1.getImage();
-                    ImagePattern pat = new ImagePattern(img);
-                    bg.setFill(pat);
-        }
-        if (game.getCurrentLevel()==1) {
-            Image img = ImageResource.BACKGROUND2.getImage();
-            ImagePattern pat = new ImagePattern(img);
-            bg.setFill(pat);
-        }
-        if (game.getCurrentLevel()==2) {
-            Image img = ImageResource.BACKGROUND3.getImage();
-            ImagePattern pat = new ImagePattern(img);
-            bg.setFill(pat);
-        }
+        Image img = ImageResource. getBg(game.getCurrentLevel());
+        ImagePattern pat = new ImagePattern(img);
+        bg.setFill(pat);
         root.getChildren().add(bg);
         stage.setTitle(windowTitle);
         stage.setScene(scene);

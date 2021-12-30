@@ -45,9 +45,9 @@ public enum ImageResource {
     BANNER_BOMB("banner_bomb.png"),
     BANNER_RANGE("banner_range.png"),
 
+    BACKGROUND0("background0.jpg"),
     BACKGROUND1("background1.jpg"),
-    BACKGROUND2("background2.jfif"),
-    BACKGROUND3("background3.png"),
+    BACKGROUND2("background2.jpg"),
     DIGIT_0("banner_0.jpg"),
     DIGIT_1("banner_1.jpg"),
     DIGIT_2("banner_2.jpg"),
@@ -74,6 +74,11 @@ public enum ImageResource {
         if (i < 0 || i > 9)
             throw new IllegalArgumentException();
         return valueOf("DIGIT_"+i).image;
+    }
+    public static Image getBg(int i) {
+        if (i < 0 || i > 3)
+            throw new IllegalArgumentException();
+        return valueOf("BACKGROUND"+i).image;
     }
 
     public static Image getPlayer(Direction direction) {
