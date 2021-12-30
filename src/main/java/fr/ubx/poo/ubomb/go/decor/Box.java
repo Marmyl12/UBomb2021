@@ -6,6 +6,7 @@ import fr.ubx.poo.ubomb.game.Position;
 import fr.ubx.poo.ubomb.go.entity.Entity;
 import fr.ubx.poo.ubomb.go.GameObject;
 import fr.ubx.poo.ubomb.go.Movable;
+import fr.ubx.poo.ubomb.go.entity.Explosion;
 import fr.ubx.poo.ubomb.go.entity.character.Character;
 
 import java.util.List;
@@ -27,8 +28,9 @@ public class Box extends Decor implements Movable {
         GameObject obj = game.getGrid().get(nextPos);
         List<Entity> ent = game.getGameObjects(nextPos);
         //Check collision with obstacle
-        for (GameObject e : ent)
-            if (e != null) return false;
+        for (GameObject e : ent){
+            if(e instanceof Explosion) return true;
+            if (e != null) return false;}
         if (obj != null) return false;
         //Check collision with the grid
         return game.inside(nextPos);
