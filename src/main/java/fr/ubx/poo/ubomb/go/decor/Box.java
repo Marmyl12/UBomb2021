@@ -29,8 +29,8 @@ public class Box extends Decor implements Movable {
         List<Entity> ent = game.getGameObjects(nextPos);
         //Check collision with obstacle
         for (GameObject e : ent){
-            if(e instanceof Explosion) return true;
-            if (e != null) return false;}
+            if (e != null && !(e instanceof Explosion)) return false;
+        }
         if (obj != null) return false;
         //Check collision with the grid
         return game.inside(nextPos);

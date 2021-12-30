@@ -3,6 +3,8 @@ package fr.ubx.poo.ubomb.view;
 import fr.ubx.poo.ubomb.game.Direction;
 import javafx.scene.image.Image;
 
+import java.util.Random;
+
 public enum ImageResource {
     // Decor elements
     STONE("stone.png"),
@@ -45,9 +47,6 @@ public enum ImageResource {
     BANNER_BOMB("banner_bomb.png"),
     BANNER_RANGE("banner_range.png"),
 
-    BACKGROUND0("background0.jpg"),
-    BACKGROUND1("background1.jpg"),
-    BACKGROUND2("background2.jpg"),
     DIGIT_0("banner_0.jpg"),
     DIGIT_1("banner_1.jpg"),
     DIGIT_2("banner_2.jpg"),
@@ -58,6 +57,11 @@ public enum ImageResource {
     DIGIT_7("banner_7.jpg"),
     DIGIT_8("banner_8.jpg"),
     DIGIT_9("banner_9.jpg"),
+
+    // Background
+    BACKGROUND0("background0.jpg"),
+    BACKGROUND1("background1.jpg"),
+    BACKGROUND2("background2.jpg"),
     ;
 
     private final Image image;
@@ -76,8 +80,9 @@ public enum ImageResource {
         return valueOf("DIGIT_"+i).image;
     }
     public static Image getBg(int i) {
-        if (i < 0 || i > 3)
-            throw new IllegalArgumentException();
+        Random random = new Random();
+        if (i < 0 || i > 2)
+            return valueOf("BACKGROUND" + random.nextInt(3)).image;
         return valueOf("BACKGROUND"+i).image;
     }
 

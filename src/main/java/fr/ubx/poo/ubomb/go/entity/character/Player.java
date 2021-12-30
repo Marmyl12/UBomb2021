@@ -63,7 +63,7 @@ public class Player extends Character {
         List<Entity> list = game.getGameObjects(getPosition());
         for (Entity e:
                 list) {
-            if (e instanceof Bomb||e instanceof Monster ) return false;
+            if (e instanceof Bomb || e instanceof Monster ) return false;
             }
         if (placedBombs < bombBagCapacity) {
             placedBombs++;

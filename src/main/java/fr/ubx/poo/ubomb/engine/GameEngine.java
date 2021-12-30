@@ -68,12 +68,15 @@ public final class GameEngine {
         int sceneHeight = height * Sprite.size;
         double scale = (float) (sceneWidth) / ((float) (12 * Sprite.size));
         Scene scene = new Scene(root, sceneWidth, sceneHeight + StatusBar.height * scale);
-        Rectangle bg = new Rectangle(scene.getWidth(), sceneHeight);
+        Rectangle bg = new Rectangle(sceneWidth, sceneHeight);
         scene.getStylesheets().add(getClass().getResource("/css/application.css").toExternalForm());
-        Image img = ImageResource. getBg(game.getCurrentLevel());
+
+        // Load background
+        Image img = ImageResource.getBg(game.getCurrentLevel());
         ImagePattern pat = new ImagePattern(img);
         bg.setFill(pat);
         root.getChildren().add(bg);
+
         stage.setTitle(windowTitle);
         stage.setScene(scene);
         stage.setResizable(false);
