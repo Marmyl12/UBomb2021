@@ -20,9 +20,13 @@ import javafx.animation.AnimationTimer;
 import javafx.application.Platform;
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.ImagePattern;
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
@@ -64,8 +68,24 @@ public final class GameEngine {
         int sceneHeight = height * Sprite.size;
         double scale = (float) (sceneWidth) / ((float) (12 * Sprite.size));
         Scene scene = new Scene(root, sceneWidth, sceneHeight + StatusBar.height * scale);
+        Rectangle bg = new Rectangle(scene.getWidth(), sceneHeight);
         scene.getStylesheets().add(getClass().getResource("/css/application.css").toExternalForm());
-
+        if (game.getCurrentLevel()==0) {
+            Image img = ImageResource.BACKGROUND1.getImage();
+                    ImagePattern pat = new ImagePattern(img);
+                    bg.setFill(pat);
+        }
+        if (game.getCurrentLevel()==1) {
+            Image img = ImageResource.BACKGROUND2.getImage();
+            ImagePattern pat = new ImagePattern(img);
+            bg.setFill(pat);
+        }
+        if (game.getCurrentLevel()==2) {
+            Image img = ImageResource.BACKGROUND3.getImage();
+            ImagePattern pat = new ImagePattern(img);
+            bg.setFill(pat);
+        }
+        root.getChildren().add(bg);
         stage.setTitle(windowTitle);
         stage.setScene(scene);
         stage.setResizable(false);

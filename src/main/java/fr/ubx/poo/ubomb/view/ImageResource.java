@@ -45,6 +45,9 @@ public enum ImageResource {
     BANNER_BOMB("banner_bomb.png"),
     BANNER_RANGE("banner_range.png"),
 
+    BACKGROUND1("background1.jpg"),
+    BACKGROUND2("background2.jfif"),
+    BACKGROUND3("background3.png"),
     DIGIT_0("banner_0.jpg"),
     DIGIT_1("banner_1.jpg"),
     DIGIT_2("banner_2.jpg"),
