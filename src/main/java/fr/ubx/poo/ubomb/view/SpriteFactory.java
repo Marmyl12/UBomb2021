@@ -34,8 +34,8 @@ public final class SpriteFactory {
             return new Sprite(layer, BONUS_BOMB_RANGE_DEC.getImage(), gameObject);
         if (gameObject instanceof BombNbInc)
             return new Sprite(layer, BONUS_BOMB_NB_INC.getImage(), gameObject);
-         if (gameObject instanceof BombNbDec)
-            return new Sprite(layer, BONUS_BOMB_RANGE_DEC.getImage(), gameObject);
+        if (gameObject instanceof BombNbDec)
+            return new Sprite(layer, BONUS_BOMB_NB_DEC.getImage(), gameObject);
         if (gameObject instanceof Princess)
             return new Sprite(layer, PRINCESS.getImage(), gameObject);
         if (gameObject instanceof DoorNextClosed)
