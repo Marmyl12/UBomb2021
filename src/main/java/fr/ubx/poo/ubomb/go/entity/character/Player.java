@@ -10,7 +10,6 @@ import fr.ubx.poo.ubomb.game.Position;
 import fr.ubx.poo.ubomb.go.Takeable;
 import fr.ubx.poo.ubomb.go.decor.*;
 import fr.ubx.poo.ubomb.go.decor.bonus.Bonus;
-import fr.ubx.poo.ubomb.go.entity.Bomb;
 import fr.ubx.poo.ubomb.go.entity.Entity;
 
 import java.util.List;
@@ -61,9 +60,8 @@ public class Player extends Character {
     //return true if the player can place a bomb and increase placed bombs
     public boolean useBomb() {
         List<Entity> list = game.getGameObjects(getPosition());
-        for (Entity e:
-                list) {
-            if (e instanceof Bomb || e instanceof Monster ) return false;
+        for (Entity e : list) {
+            if (e instanceof Monster ) return false;
             }
         if (placedBombs < bombBagCapacity) {
             placedBombs++;
